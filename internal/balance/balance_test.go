@@ -1,4 +1,4 @@
-package obligations
+package balance
 
 import (
 	"testing"

@@ -1,4 +1,4 @@
-package settlements
+package settlement
 
 import (
 	"testing"
