@@ -6,13 +6,13 @@ import (
 	"danieleambrosino.it/debt-minimizer/internal/types"
 )
 
-type BalanceHeap []types.Balance
+type MaxHeap []types.Balance
 
-func (h BalanceHeap) Len() int           { return len(h) }
-func (h BalanceHeap) Less(i, j int) bool { return h[i].Amount > h[j].Amount }
-func (h BalanceHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-func (h *BalanceHeap) Push(x any)        { *h = append(*h, x.(types.Balance)) }
-func (h *BalanceHeap) Pop() any {
+func (h MaxHeap) Len() int           { return len(h) }
+func (h MaxHeap) Less(i, j int) bool { return h[i].Amount > h[j].Amount }
+func (h MaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *MaxHeap) Push(x any)        { *h = append(*h, x.(types.Balance)) }
+func (h *MaxHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -21,8 +21,8 @@ func (h *BalanceHeap) Pop() any {
 }
 
 func ComputeMinimalSettlementSet(balances []types.Balance) []types.Settlement {
-	debtors := &BalanceHeap{}
-	creditors := &BalanceHeap{}
+	debtors := &MaxHeap{}
+	creditors := &MaxHeap{}
 	for _, b := range balances {
 		if b.Amount < 0 {
 			b.Amount = -b.Amount
