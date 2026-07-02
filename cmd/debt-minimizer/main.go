@@ -6,8 +6,7 @@ import (
 	"log"
 	"os"
 
-	"danieleambrosino.it/debt-minimizer/internal/balance"
-	"danieleambrosino.it/debt-minimizer/internal/settlement"
+	"danieleambrosino.it/debt-minimizer/internal/service"
 	"danieleambrosino.it/debt-minimizer/internal/types"
 )
 
@@ -16,8 +15,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	balances := balance.ComputeBalances(obligationsList)
-	settlementsList := settlement.ComputeMinimalSettlementSet(balances)
+	balances := service.ComputeBalances(obligationsList)
+	settlementsList := service.ComputeMinimalSettlementSet(balances)
 	err = writeSettlements(os.Stdout, settlementsList)
 	if err != nil {
 		log.Fatal(err)

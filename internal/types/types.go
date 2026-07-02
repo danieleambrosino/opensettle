@@ -18,8 +18,13 @@ type Balance struct {
 	Amount Cents
 }
 
+type Participant struct {
+	Person PersonID       `json:"person"`
+	Amount *UnsignedCents `json:"amount,omitempty"`
+}
+
 type Expense struct {
 	Payer        PersonID      `json:"payer"`
 	Amount       UnsignedCents `json:"amount"`
-	Participants []PersonID    `json:"participants"`
+	Participants []Participant `json:"participants"`
 }

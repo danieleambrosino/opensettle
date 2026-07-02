@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"danieleambrosino.it/debt-minimizer/internal/balance"
+	"danieleambrosino.it/debt-minimizer/internal/service"
 	"danieleambrosino.it/debt-minimizer/internal/types"
 )
 
@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	obligations := balance.SplitExpenses(expenses)
+	obligations := service.SplitExpenses(expenses)
 	err = writeObligations(os.Stdout, obligations)
 	if err != nil {
 		log.Fatal(err)
