@@ -17,3 +17,9 @@ type Balance struct {
 	Person PersonID
 	Amount Cents
 }
+
+type Expense struct {
+	Payer        PersonID      `json:"payer"`
+	Amount       UnsignedCents `json:"amount"`
+	Participants []PersonID    `json:"participants"`
+}
