@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"danieleambrosino.it/debt-minimizer/internal/service"
-	"danieleambrosino.it/debt-minimizer/internal/types"
+	"danieleambrosino.it/opensettle/internal/service"
+	"danieleambrosino.it/opensettle/internal/types"
 )
 
 func main() {

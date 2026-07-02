@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"danieleambrosino.it/debt-minimizer/internal/types"
+	"danieleambrosino.it/opensettle/internal/types"
 )
 
 func TestComputeBalances(t *testing.T) {

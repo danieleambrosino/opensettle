@@ -3,7 +3,7 @@ package service
 import (
 	"container/heap"
 
-	"danieleambrosino.it/debt-minimizer/internal/types"
+	"danieleambrosino.it/opensettle/internal/types"
 )
 
 type MaxHeap []types.Balance

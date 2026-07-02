@@ -4,7 +4,7 @@ import (
 	"cmp"
 	"slices"
 
-	"danieleambrosino.it/debt-minimizer/internal/types"
+	"danieleambrosino.it/opensettle/internal/types"
 )
 
 func ComputeBalances(obligations []types.Obligation) []types.Balance {

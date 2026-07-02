@@ -3,7 +3,7 @@ package service
 import (
 	"slices"
 
-	"danieleambrosino.it/debt-minimizer/internal/types"
+	"danieleambrosino.it/opensettle/internal/types"
 )
 
 func SplitExpenses(expenses []types.Expense) []types.Obligation {
