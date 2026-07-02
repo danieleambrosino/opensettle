@@ -1,3 +1,3 @@
-module danieleambrosino.it/cash-flow-minimizer
+module danieleambrosino.it/debt-minimizer
 
 go 1.26.4
