@@ -7,11 +7,11 @@ import (
 )
 
 func SplitExpenses(expenses []types.Expense) []types.Obligation {
-	var out []types.Obligation
-	for _, e := range expenses {
-		out = slices.Concat(out, splitExpense(e))
+	obligations := make([][]types.Obligation, len(expenses))
+	for i, e := range expenses {
+		obligations[i] = splitExpense(e)
 	}
-	return out
+	return slices.Concat(obligations...)
 }
 
 func splitExpense(e types.Expense) []types.Obligation {

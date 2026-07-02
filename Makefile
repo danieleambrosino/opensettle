@@ -1,4 +1,4 @@
-.PHONY: all build clean
+.PHONY: all build bin/debt-minimizer bin/expense-splitter clean
 
 all: build
 
