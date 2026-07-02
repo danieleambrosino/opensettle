@@ -85,7 +85,6 @@ func computeBalances(obligations []Obligation) []Balance {
 	return balances
 }
 
-// nets is assumed to be sorted by amount
 func computeMinimalSettlementSet(balances []Balance) []Settlement {
 	debtors := &BalanceHeap{}
 	creditors := &BalanceHeap{}
