@@ -1,9 +1,13 @@
-package main
+package obligations
 
-import "testing"
+import (
+	"testing"
+
+	"danieleambrosino.it/debt-minimizer/internal/types"
+)
 
 func TestComputeBalances(t *testing.T) {
-	debits := []Obligation{
+	debits := []types.Obligation{
 		{
 			From:   "s",
 			To:     "d",
@@ -25,8 +29,7 @@ func TestComputeBalances(t *testing.T) {
 			Amount: 2,
 		},
 	}
-	balances := computeBalances(debits)
-	t.Logf("%v", balances)
+	balances := ComputeBalances(debits)
 	if len(balances) != 3 {
 		t.Error("balances should be 3")
 	}
@@ -46,30 +49,6 @@ func TestComputeBalances(t *testing.T) {
 		t.FailNow()
 	}
 	if balances[2].Amount != 38 {
-		t.FailNow()
-	}
-}
-
-func TestComputeMinimalSettlementSet(t *testing.T) {
-	balances := []Balance{
-		{
-			Person: "i",
-			Amount: -22,
-		},
-		{
-			Person: "s",
-			Amount: -16,
-		},
-		{
-			Person: "d",
-			Amount: 38,
-		},
-	}
-	settlements := computeMinimalSettlementSet(balances)
-	for _, s := range settlements {
-		t.Logf("%s -> %s: %d", s.From, s.To, s.Amount)
-	}
-	if len(settlements) != 2 {
 		t.FailNow()
 	}
 }
