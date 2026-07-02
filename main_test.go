@@ -25,35 +25,33 @@ func TestComputeBalances(t *testing.T) {
 			Amount: 2,
 		},
 	}
-	nets := computeBalances(debits)
-	for _, n := range nets {
-		t.Logf("%s %d", n.Person, n.Amount)
+	balances := computeBalances(debits)
+	t.Logf("%v", balances)
+	if len(balances) != 3 {
+		t.Error("balances should be 3")
 	}
-	if len(nets) != 3 {
-		t.Error("nets should be 3")
-	}
-	if nets[0].Person != "i" {
+	if balances[0].Person != "i" {
 		t.FailNow()
 	}
-	if nets[0].Amount != -22 {
+	if balances[0].Amount != -22 {
 		t.FailNow()
 	}
-	if nets[1].Person != "s" {
+	if balances[1].Person != "s" {
 		t.FailNow()
 	}
-	if nets[1].Amount != -16 {
+	if balances[1].Amount != -16 {
 		t.FailNow()
 	}
-	if nets[2].Person != "d" {
+	if balances[2].Person != "d" {
 		t.FailNow()
 	}
-	if nets[2].Amount != 38 {
+	if balances[2].Amount != 38 {
 		t.FailNow()
 	}
 }
 
-func TestComputeMinimalTransactionSet(t *testing.T) {
-	nets := []Balance{
+func TestComputeMinimalSettlementSet(t *testing.T) {
+	balances := []Balance{
 		{
 			Person: "i",
 			Amount: -22,
@@ -67,11 +65,11 @@ func TestComputeMinimalTransactionSet(t *testing.T) {
 			Amount: 38,
 		},
 	}
-	debts := computeMinimalSettlementSet(nets)
-	for _, d := range debts {
-		t.Logf("%s -> %s: %d", d.From, d.To, d.Amount)
+	settlements := computeMinimalSettlementSet(balances)
+	for _, s := range settlements {
+		t.Logf("%s -> %s: %d", s.From, s.To, s.Amount)
 	}
-	if len(debts) != 2 {
+	if len(settlements) != 2 {
 		t.FailNow()
 	}
 }
