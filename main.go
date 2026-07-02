@@ -63,16 +63,16 @@ func loadObligations(reader io.Reader) ([]Obligation, error) {
 }
 
 func computeBalances(obligations []Obligation) []Balance {
-	balancesMap := make(map[PersonID]int)
+	balancesMap := make(map[PersonID]Cents)
 	for _, o := range obligations {
-		balancesMap[o.To] += int(o.Amount)
-		balancesMap[o.From] -= int(o.Amount)
+		balancesMap[o.To] += Cents(o.Amount)
+		balancesMap[o.From] -= Cents(o.Amount)
 	}
 	balances := make([]Balance, 0, len(balancesMap))
 	for id, amt := range balancesMap {
 		balances = append(balances, Balance{
 			Person: id,
-			Amount: Cents(amt),
+			Amount: amt,
 		})
 	}
 	slices.SortFunc(balances, func(a, b Balance) int {
