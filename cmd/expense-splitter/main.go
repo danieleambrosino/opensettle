@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	expenses, err := loadExpenses(os.Stdin)
+	expenses, err := readExpenses(os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,7 +22,7 @@ func main() {
 	}
 }
 
-func loadExpenses(r io.Reader) ([]types.Expense, error) {
+func readExpenses(r io.Reader) ([]types.Expense, error) {
 	var expenses []types.Expense
 	decoder := json.NewDecoder(r)
 	err := decoder.Decode(&expenses)
