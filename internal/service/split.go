@@ -44,15 +44,15 @@ func splitExpense(e types.Expense) []types.Obligation {
 		}
 	}
 
-	var out []types.Obligation
+	obligations := make([]types.Obligation, 0, len(shares))
 	for p, s := range shares {
 		if p == e.Payer || s == 0 {
 			continue
 		}
-		out = append(out, types.Obligation{
+		obligations = append(obligations, types.Obligation{
 			From: p, To: e.Payer,
 			Amount: types.UnsignedCents(s),
 		})
 	}
-	return out
+	return obligations
 }
