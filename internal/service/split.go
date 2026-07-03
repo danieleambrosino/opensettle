@@ -23,9 +23,9 @@ func splitExpense(e types.Expense) []types.Obligation {
 
 	for _, p := range e.Participants {
 		if p.Amount != nil {
-			s := min(int(*p.Amount), remaining)
-			shares[p.Person] += s
-			remaining -= s
+			share := min(int(*p.Amount), remaining)
+			shares[p.Person] += share
+			remaining -= share
 		} else {
 			participantsWithEqualShares[p.Person] = struct{}{}
 		}
