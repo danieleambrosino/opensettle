@@ -13,13 +13,12 @@ func ComputeBalances(obligations []types.Obligation) []types.Balance {
 		balancesMap[o.To] += types.Cents(o.Amount)
 		balancesMap[o.From] -= types.Cents(o.Amount)
 	}
+
 	balances := make([]types.Balance, 0, len(balancesMap))
 	for id, amt := range balancesMap {
-		balances = append(balances, types.Balance{
-			Person: id,
-			Amount: amt,
-		})
+		balances = append(balances, types.Balance{Person: id, Amount: amt})
 	}
+
 	slices.SortFunc(balances, func(a, b types.Balance) int {
 		comparison := cmp.Compare(a.Amount, b.Amount)
 		if comparison != 0 {
@@ -27,5 +26,6 @@ func ComputeBalances(obligations []types.Obligation) []types.Balance {
 		}
 		return cmp.Compare(a.Person, b.Person)
 	})
+
 	return balances
 }
