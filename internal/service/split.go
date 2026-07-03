@@ -18,40 +18,44 @@ func splitExpense(e types.Expense) []types.Obligation {
 	total := int(e.Amount)
 	remaining := total
 
-	shares := make(map[types.PersonID]int)
-	participantsWithEqualShares := make(map[types.PersonID]struct{})
+	type share struct {
+		person types.PersonID
+		amount int
+	}
+	shares := make([]share, 0, len(e.Participants))
+	var equalParties []types.PersonID
 
 	for _, p := range e.Participants {
 		if p.Amount != nil {
-			share := min(int(*p.Amount), remaining)
-			shares[p.Person] += share
-			remaining -= share
+			s := min(int(*p.Amount), remaining)
+			shares = append(shares, share{person: p.Person, amount: s})
+			remaining -= s
 		} else {
-			participantsWithEqualShares[p.Person] = struct{}{}
+			equalParties = append(equalParties, p.Person)
 		}
 	}
 
-	if m := len(participantsWithEqualShares); m > 0 {
+	if m := len(equalParties); m > 0 {
 		eq := remaining / m
 		rem := remaining % m
-		for p := range participantsWithEqualShares {
+		for _, p := range equalParties {
 			extra := 0
 			if rem > 0 {
 				extra = 1
 				rem--
 			}
-			shares[p] = eq + extra
+			shares = append(shares, share{person: p, amount: eq + extra})
 		}
 	}
 
 	obligations := make([]types.Obligation, 0, len(shares))
-	for p, s := range shares {
-		if p == e.Payer || s == 0 {
+	for _, s := range shares {
+		if s.person == e.Payer || s.amount == 0 {
 			continue
 		}
 		obligations = append(obligations, types.Obligation{
-			From: p, To: e.Payer,
-			Amount: types.UnsignedCents(s),
+			From: s.person, To: e.Payer,
+			Amount: types.UnsignedCents(s.amount),
 		})
 	}
 	return obligations
