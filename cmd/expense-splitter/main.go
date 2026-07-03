@@ -24,12 +24,10 @@ func main() {
 
 func readExpenses(r io.Reader) ([]types.Expense, error) {
 	var expenses []types.Expense
-	decoder := json.NewDecoder(r)
-	err := decoder.Decode(&expenses)
+	err := json.NewDecoder(r).Decode(&expenses)
 	return expenses, err
 }
 
 func writeObligations(w io.Writer, obligations []types.Obligation) error {
-	encoder := json.NewEncoder(w)
-	return encoder.Encode(obligations)
+	return json.NewEncoder(w).Encode(obligations)
 }

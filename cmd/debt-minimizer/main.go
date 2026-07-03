@@ -11,13 +11,13 @@ import (
 )
 
 func main() {
-	obligationsList, err := readObligations(os.Stdin)
+	obligations, err := readObligations(os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}
-	balances := service.ComputeBalances(obligationsList)
-	settlementsList := service.ComputeMinimalSettlementSet(balances)
-	err = writeSettlements(os.Stdout, settlementsList)
+	balances := service.ComputeBalances(obligations)
+	settlements := service.ComputeMinimalSettlementSet(balances)
+	err = writeSettlements(os.Stdout, settlements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,12 +25,10 @@ func main() {
 
 func readObligations(reader io.Reader) ([]types.Obligation, error) {
 	var obligations []types.Obligation
-	decoder := json.NewDecoder(reader)
-	err := decoder.Decode(&obligations)
+	err := json.NewDecoder(reader).Decode(&obligations)
 	return obligations, err
 }
 
 func writeSettlements(w io.Writer, settlements []types.Settlement) error {
-	encoder := json.NewEncoder(w)
-	return encoder.Encode(settlements)
+	return json.NewEncoder(w).Encode(settlements)
 }
