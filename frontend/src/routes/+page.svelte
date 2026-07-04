@@ -162,7 +162,7 @@
     <!-- ══════════ STEP 1: EXPENSES ══════════ -->
     <SectionCard number={1} title="Expenses" accent="indigo">
       <ExpenseForm onaddexpense={addExpense} />
-      <ExpenseTable {expenses} onremove={removeExpense} />
+      <ExpenseTable bind:items={expenses} onremove={removeExpense} />
     </SectionCard>
 
     <!-- ══════════ STEP 2: OBLIGATIONS ══════════ -->
