@@ -123,6 +123,10 @@ a good excuse. The algorithm ended up implemented twice — Go for the CLI,
 TypeScript for the webapp. Who cares. It's a side project, and writing
 the same thing in two languages was half the fun.
 
+All algorithms are hand-written. The webapp UI — the Svelte components,
+layout, and styling — was built with some help from DeepSeek V4 Flash.
+Consider it my pair programmer for the frontend bits.
+
 ## Project structure
 
 ```
