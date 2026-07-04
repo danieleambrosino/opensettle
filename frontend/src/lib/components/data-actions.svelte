@@ -1,6 +1,6 @@
 <script lang="ts">
-  import DocumentIcon from "$lib/components/icons/document.svelte";
-  import SyncIcon from "$lib/components/icons/sync.svelte";
+  import DocumentArrowDownIcon from "$lib/components/icons/document-arrow-down.svelte";
+  import DocumentArrowUpIcon from "$lib/components/icons/document-arrow-up.svelte";
   import type { Balance, Expense, Obligation, Settlement } from "$lib/types";
 
   interface ImportData {
@@ -93,17 +93,17 @@
   <button
     type="button"
     onclick={() => fileInput?.click()}
-    class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 px-3 py-1.5 text-xs font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
+    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
   >
-    <SyncIcon class="size-3.5" />
+    <DocumentArrowDownIcon class="size-5" />
     Import
   </button>
   <button
     type="button"
     onclick={handleExport}
-    class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 px-3 py-1.5 text-xs font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
+    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
   >
-    <DocumentIcon class="size-3.5" />
+    <DocumentArrowUpIcon class="size-5" />
     Export
   </button>
 </div>
