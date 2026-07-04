@@ -7,7 +7,7 @@
 
 <svelte:head>
   <link rel="icon" href={favicon}>
-  <title>OpenSettle — Cash Flow Minimizer</title>
+  <title>OpenSettle</title>
   <meta
     name="description"
     content="Split group expenses, balance debts, and find the minimal settlement set."
