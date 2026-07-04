@@ -1,87 +1,41 @@
-# OpenSettle / Cash Flow Minimizer
+# OpenSettle — AI agent context
 
-## Cosa fa
+See `README.md` for overview, pipeline, types, and algorithms.
+Here only what an AI agent needs to write code.
 
-Pipeline a 2 stadi per dividere spese di gruppo e minimizzare i bonifici di rimborso.
+## Code conventions
 
-```
-Expense[] (JSON stdin)
-  → [expense-splitter] → SplitExpenses()
-  → Obligation[] (JSON stdout)
-  → [debt-minimizer] → ComputeBalances() + ComputeMinimalSettlementSet()
-  → Settlement[] (JSON stdout)
-```
+- No comments (unless explicitly asked for)
+- Package `internal/service` uses in-package tests (`package service`)
+- JSON tags use `snake_case` on types
+- Zero external dependencies
 
-Esempio:
-```bash
-cat test.json | go run ./cmd/expense-splitter | go run ./cmd/debt-minimizer
-```
+## Known gaps
 
-## Tech stack
+- **Missing**: tests for `split.go` (`internal/service/split.go`)
 
-- **Go 1.26.4**, modulo `danieleambrosino.it/opensettle`
-- Zero dipendenze esterne
-- CLI Unix-pipe: JSON su stdin/stdout
-- Build con `make` (target: `build`, `clean`)
-- Binary statici in `bin/` (gitignorati)
+## Key file paths (CLI)
 
-## Struttura
+| Path | Content |
+|------|---------|
+| `cli/internal/types/types.go` | Shared types (PersonID, Expense, etc.) |
+| `cli/internal/service/split.go` | SplitExpenses() |
+| `cli/internal/service/balance.go` | ComputeBalances() |
+| `cli/internal/service/settlement.go` | ComputeMinimalSettlementSet() |
+| `cli/internal/service/balance_test.go` | Test ComputeBalances |
+| `cli/internal/service/settlement_test.go` | Test settlement |
+| `cli/internal/cli/io.go` | JSON read/write helpers |
+| `cli/cmd/settle/main.go` | All-in-one CLI |
+| `cli/cmd/expense-splitter/main.go` | Expense[] → Obligation[] |
+| `cli/cmd/debt-minimizer/main.go` | Obligation[] → Settlement[] |
+| `cli/Makefile` | Build targets |
 
-```
-├── cmd/
-│   ├── expense-splitter/main.go    # CLI: Expense[] → Obligation[]
-│   └── debt-minimizer/main.go      # CLI: Obligation[] → Settlement[]
-├── internal/
-│   ├── types/types.go              # Definizioni tipi (PersonID, Expense, Obligation, ecc.)
-│   └── service/
-│       ├── split.go                # SplitExpenses(): divide spese in obblighi
-│       ├── balance.go              # ComputeBalances(): obblighi → saldi netti
-│       ├── settlement.go           # ComputeMinimalSettlementSet(): greedy max-heap
-│       ├── balance_test.go         # Test ComputeBalances
-│       └── settlement_test.go      # Test ComputeMinimalSettlementSet
-└── Makefile
-```
+## Webapp (SvelteKit)
 
-## Tipi chiave (`types.go`)
-
-| Tipo | Descrizione |
-|------|-------------|
-| `PersonID` | `string` |
-| `UnsignedCents` | `uint` |
-| `Cents` | `int` (saldi, può essere negativo) |
-| `Transaction{From, To, Amount}` | Struttura base (da, a, importo) |
-| `Obligation` | alias di `Transaction` (debito) |
-| `Settlement` | alias di `Transaction` (bonifico consigliato) |
-| `Balance{Person, Amount}` | Saldo netto: negativo = debitore, positivo = creditore |
-| `Participant{Person, Amount?}` | Partecipante con quota opzionale |
-| `Expense{Payer, Amount, Participants}` | Spesa di gruppo |
-
-## Logica
-
-### `SplitExpenses(expenses)`
-Per ogni spesa: chi ha `Amount` specificato paga quello (capped al rimanente); il resto è diviso equamente tra gli altri, con cents distribuiti uno a testa. Skip del pagatore stesso.
-
-### `ComputeBalances(obligations)`
-Somma algebrica: `To` += amount, `From` -= amount. Risultato ordinato per amount (asc) poi per person.
-
-### `ComputeMinimalSettlementSet(balances)`
-Algoritmo greedy con max-heap (`container/heap`): accoppia il debitore più grande col creditore più grande finché tutti a zero. Produce al massimo `n-1` transazioni.
-
-## Test
-
-Framework standard Go `testing`. Esegui con:
-```bash
-go test ./internal/service/...
-```
-
-**Copertura attuale:**
-- `TestComputeBalances` (balance_test.go)
-- `TestComputeMinimalSettlementSet` (settlement_test.go)
-- **Mancante**: test per `split.go`
-
-## Convenzioni codice
-
-- Nessun commento (se non richiesti esplicitamente)
-- Package `internal/service` usa test in-package (`package service`)
-- JSON tag `snake_case` sui tipi
-- Zero dipendenze esterne
+| Path | Content |
+|------|---------|
+| `webapp/src/lib/index.ts` | Algorithm (split, balance, settlement) in TS |
+| `webapp/src/lib/types.d.ts` | TypeScript type definitions |
+| `webapp/src/lib/storage.ts` | localStorage persistence |
+| `webapp/src/lib/components/` | Svelte components |
+| `webapp/src/routes/+page.svelte` | Main page |
