@@ -26,9 +26,7 @@
     obligations.length > 0 ? computeBalances(obligations) : []
   );
   let computedSettlements = $derived(
-    balances.length > 0
-      ? computeMinimalSettlementSet($state.snapshot(balances))
-      : []
+    balances.length > 0 ? computeMinimalSettlementSet(balances) : []
   );
 
   // ── Sync derived → editable state ──

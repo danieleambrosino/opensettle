@@ -149,7 +149,7 @@ export function computeMinimalSettlementSet(balances: Balance[]): Settlement[] {
     if (b.amount < 0) {
       debtors.push({ person: b.person, amount: -b.amount });
     } else if (b.amount > 0) {
-      creditors.push(b);
+      creditors.push({ person: b.person, amount: b.amount });
     }
   }
 
