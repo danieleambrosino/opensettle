@@ -1,11 +1,11 @@
 <script lang="ts">
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
-  import Plus from "$lib/components/icons/Plus.svelte";
-  import Trash from "$lib/components/icons/Trash.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
+  import Plus from "$lib/components/icons/plus.svelte";
+  import Trash from "$lib/components/icons/trash.svelte";
   import type { Expense } from "$lib/types";
   import { personColor } from "$lib/utils";
-  import Avatar from "./Avatar.svelte";
-  import EmptyState from "./EmptyState.svelte";
+  import Avatar from "./avatar.svelte";
+  import EmptyState from "./empty-state.svelte";
 
   const focusRings: Record<string, string> = {
     indigo:
@@ -15,7 +15,7 @@
   let {
     items = $bindable(),
     accent = "indigo",
-    onfocus = () => {},
+    onfocus,
     onremove,
   }: {
     items: Expense[];
@@ -94,9 +94,9 @@
                   step="0.01"
                   value={items[i].amount / 100}
                   oninput={(e) => {
-                    const v = parseFloat(e.currentTarget.value);
-                    if (!Number.isNaN(v)) items[i].amount = Math.round(v * 100);
-                  }}
+                      const v = Number.parseFloat(e.currentTarget.value);
+                      if (!Number.isNaN(v)) { items[i].amount = Math.round(v * 100); }
+                    }}
                   {onfocus}
                   class="w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 {focusRing}"
                 >
@@ -133,15 +133,15 @@
                         type="number"
                         step="0.01"
                         placeholder="opt"
-                        value={items[i].participants[j].amount !== null
-                            ? items[i].participants[j].amount! / 100
-                            : ""}
+                        value={items[i].participants[j].amount === null
+                            ? ""
+                            : items[i].participants[j].amount / 100}
                         oninput={(e) => {
                           const raw = e.currentTarget.value;
                           if (raw === "") {
                             items[i].participants[j].amount = null;
                           } else {
-                            const v = parseFloat(raw);
+                            const v = Number.parseFloat(raw);
                             if (!Number.isNaN(v)) {
                               items[i].participants[j].amount =
                                 Math.round(v * 100);
@@ -153,6 +153,7 @@
                       >
                     </div>
                     <button
+                      type="button"
                       onclick={() => removeParticipant(i, j)}
                       aria-label="Remove participant"
                       class="flex size-5 shrink-0 items-center justify-center rounded text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"
@@ -162,6 +163,7 @@
                   </div>
                 {/each}
                 <button
+                  type="button"
                   onclick={() => addParticipant(i)}
                   class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-400 transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-300"
                 >
@@ -172,6 +174,7 @@
             </td>
             <td class="px-4 py-3 text-right align-top">
               <button
+                type="button"
                 onclick={() => onremove?.(i)}
                 aria-label="Remove expense"
                 class="rounded-lg p-1.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"

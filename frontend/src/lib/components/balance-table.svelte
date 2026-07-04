@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
-  import Trash from "$lib/components/icons/Trash.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
+  import Trash from "$lib/components/icons/trash.svelte";
   import type { Balance } from "$lib/types";
-  import Avatar from "./Avatar.svelte";
+  import Avatar from "./avatar.svelte";
 
   let {
     items = $bindable(),
     accent = "amber",
-    onfocus = () => {},
+    onfocus,
     onremove,
     empty,
     emptyMessage = "No items yet",
@@ -20,6 +20,16 @@
     empty?: Snippet;
     emptyMessage?: string;
   } = $props();
+
+  function statusLabel(amount: number): string {
+    if (amount < 0) {
+      return "owes";
+    }
+    if (amount > 0) {
+      return "owed";
+    }
+    return "settled";
+  }
 </script>
 
 {#if items.length > 0}
@@ -69,8 +79,8 @@
                     step="0.01"
                     value={items[i].amount / 100}
                     oninput={(e) => {
-                      const v = parseFloat(e.currentTarget.value);
-                      if (!Number.isNaN(v)) items[i].amount = Math.round(v * 100);
+                      const v = Number.parseFloat(e.currentTarget.value);
+                      if (!Number.isNaN(v)) { items[i].amount = Math.round(v * 100); }
                     }}
                     {onfocus}
                     class={[
@@ -89,12 +99,13 @@
                   items[i].amount === 0 && "text-slate-500",
                 ]}
                 >
-                  {items[i].amount < 0 ? "owes" : items[i].amount > 0 ? "owed" : "settled"}
+                  {statusLabel(items[i].amount)}
                 </span>
               </div>
             </td>
             <td class="px-4 py-3.5 text-right">
               <button
+                type="button"
                 onclick={() => onremove?.(i)}
                 aria-label="Remove balance"
                 class="rounded-lg p-1.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"

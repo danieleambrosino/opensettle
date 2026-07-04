@@ -3,6 +3,8 @@ import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 
+const NODE_MODULES_RE = /[/\\]/;
+
 export default defineConfig({
   plugins: [
     tailwindcss(),
@@ -10,7 +12,9 @@ export default defineConfig({
       compilerOptions: {
         // Force runes mode for the project, except for libraries. Can be removed in svelte 6.
         runes: ({ filename }) =>
-          filename.split(/[/\\]/).includes("node_modules") ? undefined : true,
+          filename.split(NODE_MODULES_RE).includes("node_modules")
+            ? undefined
+            : true,
       },
 
       // adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.

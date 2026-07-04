@@ -27,7 +27,7 @@
               "flex size-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300",
               step.done && "bg-linear-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/30",
               !step.done && step.active && "border border-slate-600 bg-slate-800/60 text-slate-400",
-              !step.done && !step.active && "border border-slate-800 bg-slate-900/40 text-slate-700",
+              !(step.done || step.active) && "border border-slate-800 bg-slate-900/40 text-slate-700",
             ]}
           >
             {step.done ? "\u2713" : i + 1}
@@ -37,7 +37,7 @@
               "whitespace-nowrap text-[10px] font-medium uppercase tracking-wider",
               step.done && "text-emerald-400",
               !step.done && step.active && "text-slate-400",
-              !step.done && !step.active && "text-slate-700",
+              !(step.done || step.active) && "text-slate-700",
             ]}
           >
             {step.label}

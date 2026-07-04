@@ -99,7 +99,7 @@ class MaxHeap {
 
   pop(): Balance {
     const top = this.data[0];
-    const last = this.data.pop()!;
+    const last = this.data.pop() as Balance;
     if (this.data.length > 0) {
       this.data[0] = last;
       this._siftDown(0);
@@ -108,21 +108,23 @@ class MaxHeap {
   }
 
   private _siftUp(idx: number): void {
-    while (idx > 0) {
-      const parent = (idx - 1) >> 1;
-      if (this.data[parent].amount >= this.data[idx].amount) {
+    let i = idx;
+    while (i > 0) {
+      const parent = Math.floor((i - 1) / 2);
+      if (this.data[parent].amount >= this.data[i].amount) {
         break;
       }
-      [this.data[parent], this.data[idx]] = [this.data[idx], this.data[parent]];
-      idx = parent;
+      [this.data[parent], this.data[i]] = [this.data[i], this.data[parent]];
+      i = parent;
     }
   }
 
   private _siftDown(idx: number): void {
     const n = this.data.length;
+    let i = idx;
     while (true) {
-      let largest = idx;
-      const left = (idx << 1) + 1;
+      let largest = i;
+      const left = i * 2 + 1;
       const right = left + 1;
       if (left < n && this.data[left].amount > this.data[largest].amount) {
         largest = left;
@@ -130,14 +132,11 @@ class MaxHeap {
       if (right < n && this.data[right].amount > this.data[largest].amount) {
         largest = right;
       }
-      if (largest === idx) {
+      if (largest === i) {
         break;
       }
-      [this.data[idx], this.data[largest]] = [
-        this.data[largest],
-        this.data[idx],
-      ];
-      idx = largest;
+      [this.data[i], this.data[largest]] = [this.data[largest], this.data[i]];
+      i = largest;
     }
   }
 }

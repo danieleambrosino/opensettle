@@ -1,15 +1,15 @@
 <script lang="ts">
-  import AutoSync from "$lib/components/AutoSync.svelte";
-  import BalanceTable from "$lib/components/BalanceTable.svelte";
-  import DataActions from "$lib/components/DataActions.svelte";
-  import ExpenseForm from "$lib/components/ExpenseForm.svelte";
-  import ExpenseTable from "$lib/components/ExpenseTable.svelte";
-  import FromToTable from "$lib/components/FromToTable.svelte";
-  import Hero from "$lib/components/Hero.svelte";
-  import CheckCircle from "$lib/components/icons/CheckCircle.svelte";
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
-  import DocumentIcon from "$lib/components/icons/Document.svelte";
-  import SectionCard from "$lib/components/SectionCard.svelte";
+  import AutoSync from "$lib/components/auto-sync.svelte";
+  import BalanceTable from "$lib/components/balance-table.svelte";
+  import DataActions from "$lib/components/data-actions.svelte";
+  import ExpenseForm from "$lib/components/expense-form.svelte";
+  import ExpenseTable from "$lib/components/expense-table.svelte";
+  import FromToTable from "$lib/components/from-to-table.svelte";
+  import Hero from "$lib/components/hero.svelte";
+  import CheckCircle from "$lib/components/icons/check-circle.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
+  import DocumentIcon from "$lib/components/icons/document.svelte";
+  import SectionCard from "$lib/components/section-card.svelte";
   import {
     computeBalances,
     computeMinimalSettlementSet,

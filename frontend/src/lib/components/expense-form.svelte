@@ -1,8 +1,8 @@
 <script lang="ts">
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
-  import Plus from "$lib/components/icons/Plus.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
+  import Plus from "$lib/components/icons/plus.svelte";
 
-  import Trash from "$lib/components/icons/Trash.svelte";
+  import Trash from "$lib/components/icons/trash.svelte";
   import type { Participant } from "$lib/types";
 
   let newPayer = $state("");
@@ -119,6 +119,7 @@
           >
         </div>
         <button
+          type="button"
           onclick={() => removeParticipantField(i)}
           disabled={newParticipants.length <= 1}
           aria-label="Remove participant"
@@ -129,6 +130,7 @@
       </div>
     {/each}
     <button
+      type="button"
       onclick={addParticipantField}
       class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-indigo-400 transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-300"
     >
@@ -139,6 +141,7 @@
 
   <div class="mt-4 flex gap-3">
     <button
+      type="button"
       onclick={addExpense}
       class="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-[0.97]"
     >

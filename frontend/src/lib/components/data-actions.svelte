@@ -1,6 +1,6 @@
 <script lang="ts">
-  import DocumentIcon from "$lib/components/icons/Document.svelte";
-  import SyncIcon from "$lib/components/icons/Sync.svelte";
+  import DocumentIcon from "$lib/components/icons/document.svelte";
+  import SyncIcon from "$lib/components/icons/sync.svelte";
   import type { Balance, Expense, Obligation, Settlement } from "$lib/types";
 
   interface ImportData {
@@ -34,7 +34,7 @@
     onImport: (data: ImportData) => void;
   } = $props();
 
-  let fileInput!: HTMLInputElement;
+  let fileInput = $state<HTMLInputElement>();
 
   function handleExport() {
     const data: ImportData = {
@@ -72,11 +72,13 @@
         }
         onImport(data);
       } catch (err) {
-        alert(`Import failed: ${(err as Error).message}`);
+        console.error(`Import failed: ${(err as Error).message}`);
       }
     };
     reader.readAsText(file);
-    fileInput.value = "";
+    if (fileInput) {
+      fileInput.value = "";
+    }
   }
 </script>
 
@@ -90,7 +92,7 @@
   >
   <button
     type="button"
-    onclick={() => fileInput.click()}
+    onclick={() => fileInput?.click()}
     class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/40 px-3 py-1.5 text-xs font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
   >
     <SyncIcon class="size-3.5" />

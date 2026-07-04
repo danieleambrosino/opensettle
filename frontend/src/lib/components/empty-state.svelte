@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
 
   let { message, children }: { message: string; children?: Snippet } = $props();
 </script>

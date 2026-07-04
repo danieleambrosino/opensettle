@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import Avatar from "./Avatar.svelte";
+  import Avatar from "./avatar.svelte";
 
   interface Item {
     amount: number;
@@ -8,8 +8,8 @@
     to: string;
   }
 
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
-  import Trash from "$lib/components/icons/Trash.svelte";
+  import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
+  import Trash from "$lib/components/icons/trash.svelte";
 
   const focusRings: Record<string, string> = {
     violet:
@@ -21,7 +21,7 @@
   let {
     items = $bindable(),
     accent = "violet",
-    onfocus = () => {},
+    onfocus,
     onremove,
     empty,
     emptyMessage = "No items yet",
@@ -99,9 +99,9 @@
                   step="0.01"
                   value={items[i].amount / 100}
                   oninput={(e) => {
-                    const v = parseFloat(e.currentTarget.value);
-                    if (!Number.isNaN(v)) items[i].amount = Math.round(v * 100);
-                  }}
+                      const v = Number.parseFloat(e.currentTarget.value);
+                      if (!Number.isNaN(v)) { items[i].amount = Math.round(v * 100); }
+                    }}
                   {onfocus}
                   class="w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 {focusRing}"
                 >
@@ -109,6 +109,7 @@
             </td>
             <td class="px-4 py-3 text-right">
               <button
+                type="button"
                 onclick={() => onremove?.(i)}
                 aria-label="Remove row"
                 class="rounded-lg p-1.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"
