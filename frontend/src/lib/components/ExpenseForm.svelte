@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Plus from "$lib/components/icons/Plus.svelte";
   import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
+  import Plus from "$lib/components/icons/Plus.svelte";
 
   import Trash from "$lib/components/icons/Trash.svelte";
   import type { Participant } from "$lib/types";
@@ -77,16 +77,16 @@
       >
       <div class="relative">
         <span
-          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5"
         >
-          <CurrencyEuro class="size-4 text-slate-500" />
+          <CurrencyEuro class="size-3.5 translate-y-px text-slate-500" />
         </span>
         <input
           id="new-amount"
           type="number"
           placeholder="0.00"
           bind:value={newAmount}
-          class="w-full rounded-lg border border-slate-700 bg-slate-800/80 py-2.5 pl-7 pr-3.5 text-sm text-slate-200 placeholder-slate-600 transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+          class="w-full rounded-lg border border-slate-700 bg-slate-800/80 py-2.5 pl-8 pr-3.5 text-sm text-slate-200 placeholder-slate-600 transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
         >
       </div>
     </div>
@@ -109,13 +109,13 @@
           <span
             class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5"
           >
-            <CurrencyEuro class="size-3.5 text-slate-600" />
+            <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
           </span>
           <input
             type="number"
             placeholder="optional"
             bind:value={newParticipants[i].amount}
-            class="w-full rounded-lg border border-slate-700 bg-slate-800/80 py-2 pl-6 pr-3 text-sm text-slate-200 placeholder-slate-600 transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+            class="w-full rounded-lg border border-slate-700 bg-slate-800/80 py-2 pl-8 pr-3 text-sm text-slate-200 placeholder-slate-600 transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
           >
         </div>
         <button

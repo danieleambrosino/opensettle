@@ -58,9 +58,11 @@
               <div class="flex items-center gap-2">
                 <div class="relative inline-block">
                   <span
-                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2"
+                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5"
                   >
-                    <CurrencyEuro class="size-3.5 text-slate-600" />
+                    <CurrencyEuro
+                      class="size-3.5 translate-y-px text-slate-600"
+                    />
                   </span>
                   <input
                     type="number"
@@ -72,7 +74,7 @@
                     }}
                     {onfocus}
                     class={[
-                      "w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-6 pr-2.5 text-sm font-mono font-medium transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30",
+                      "w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-mono font-medium transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30",
                       items[i].amount < 0 && "text-red-400",
                       items[i].amount > 0 && "text-emerald-400",
                       items[i].amount === 0 && "text-slate-400",

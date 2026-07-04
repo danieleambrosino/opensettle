@@ -6,8 +6,8 @@
   import ExpenseTable from "$lib/components/ExpenseTable.svelte";
   import FromToTable from "$lib/components/FromToTable.svelte";
   import Hero from "$lib/components/Hero.svelte";
-  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
   import CheckCircle from "$lib/components/icons/CheckCircle.svelte";
+  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
   import DocumentIcon from "$lib/components/icons/Document.svelte";
   import SectionCard from "$lib/components/SectionCard.svelte";
   import {
