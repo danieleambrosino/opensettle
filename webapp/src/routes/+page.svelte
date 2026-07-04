@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { computeBalances } from "$lib/balance";
   import AutoSync from "$lib/components/auto-sync.svelte";
   import BalanceTable from "$lib/components/balance-table.svelte";
   import DataActions from "$lib/components/data-actions.svelte";
@@ -10,11 +11,8 @@
   import CurrencyEuro from "$lib/components/icons/currency-euro.svelte";
   import DocumentIcon from "$lib/components/icons/document.svelte";
   import SectionCard from "$lib/components/section-card.svelte";
-  import {
-    computeBalances,
-    computeMinimalSettlementSet,
-    splitExpenses,
-  } from "$lib/index";
+  import { computeMinimalSettlementSet } from "$lib/settlement";
+  import { splitExpenses } from "$lib/split";
   import { loadExpenses, saveExpenses } from "$lib/storage";
   import type { Balance, Expense, Obligation, Settlement } from "$lib/types";
 
