@@ -11,7 +11,7 @@
     <h1
       class="bg-linear-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-4xl font-black tracking-tight text-transparent sm:text-5xl"
     >
-      Settlement Calculator
+      OpenSettle
     </h1>
     <p class="mt-2 text-sm text-slate-500">
       Split expenses, balance debts, settle up
