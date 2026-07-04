@@ -6,21 +6,28 @@ Minimal group expense settlement. CLI + webapp.
 cat expenses.json | opensettle
 ```
 
-## Pipeline
+## Backstory
 
-```
-                          ┌─► Obligation[] ──► Balance[] ──┐
-Expense[] ──► split ──────┘                                ├──► Settlement[]
-                          └─ (tweak here if needed) ───────┘
-```
+I was organising a group gift. Multiple people bought different things,
+and at the end we needed to split everything fairly. Some people wanted
+to contribute less than others.
 
-Four stages, each a transformation on JSON:
+I could have used Tricount or Splitwise. But where's the fun in that?
 
-| Input | Command | Output |
-|-------|---------|--------|
-| `Expense[]` | `expense-splitter` | `Obligation[]` |
-| `Obligation[]` | `debt-minimizer` | `Settlement[]` |
-| `Expense[]` | `settle` (all-in-one) | `Settlement[]` |
+I wanted to write the splitting algorithm myself. I wanted to learn Go.
+And I wanted a tool that works the Unix way — small composable commands
+that pipe JSON around, so I can inspect, edit, or rewire the intermediate
+results if someone's share doesn't feel right.
+
+So I built a CLI. Then I thought: why not a GUI too? I wanted to try
+SvelteKit, and having a visual version of the same pipeline felt like
+a good excuse. The algorithm ended up implemented twice — Go for the CLI,
+TypeScript for the webapp. Who cares. It's a side project, and writing
+the same thing in two languages was half the fun.
+
+All algorithms are hand-written. The webapp UI — the Svelte components,
+layout, and styling — was built with some help from DeepSeek V4 Flash.
+Consider it my pair programmer for the frontend bits.
 
 ## How it works
 
@@ -50,6 +57,14 @@ make
 ```
 
 Binaries land in `cli/bin/`.
+
+### Commands
+
+| Input | Command | Output |
+|-------|---------|--------|
+| `Expense[]` | `expense-splitter` | `Obligation[]` |
+| `Obligation[]` | `debt-minimizer` | `Settlement[]` |
+| `Expense[]` | `settle` (all-in-one) | `Settlement[]` |
 
 ### Usage
 
@@ -103,29 +118,6 @@ npm run dev
 Each stage auto-syncs from the previous one. But you can turn off
 auto-sync and edit the data by hand — useful when the equal split
 doesn't fit reality and someone should pay a bit less.
-
-## The story
-
-I was organising a group gift. Multiple people bought different things,
-and at the end we needed to split everything fairly. Some people wanted
-to contribute less than others.
-
-I could have used Tricount or Splitwise. But where's the fun in that?
-
-I wanted to write the splitting algorithm myself. I wanted to learn Go.
-And I wanted a tool that works the Unix way — small composable commands
-that pipe JSON around, so I can inspect, edit, or rewire the intermediate
-results if someone's share doesn't feel right.
-
-So I built a CLI. Then I thought: why not a GUI too? I wanted to try
-SvelteKit, and having a visual version of the same pipeline felt like
-a good excuse. The algorithm ended up implemented twice — Go for the CLI,
-TypeScript for the webapp. Who cares. It's a side project, and writing
-the same thing in two languages was half the fun.
-
-All algorithms are hand-written. The webapp UI — the Svelte components,
-layout, and styling — was built with some help from DeepSeek V4 Flash.
-Consider it my pair programmer for the frontend bits.
 
 ## Project structure
 
@@ -187,4 +179,4 @@ doesn't need a backend.
 
 ## License
 
-Do whatever you want with this :)
+MIT
