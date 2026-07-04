@@ -10,10 +10,6 @@ Here only what an AI agent needs to write code.
 - JSON tags use `snake_case` on types
 - Zero external dependencies
 
-## Known gaps
-
-- **Missing**: tests for `split.go` (`internal/service/split.go`)
-
 ## Key file paths (CLI)
 
 | Path | Content |
