@@ -35,7 +35,7 @@ function splitExpense(expense: Expense): Obligation[] {
 
   const m = participantsWithEqualShares.size;
   if (m > 0) {
-    const eq = remaining / m;
+    const eq = Math.floor(remaining / m);
     let rem = remaining % m;
     for (const p of participantsWithEqualShares) {
       let extra = 0;

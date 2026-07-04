@@ -8,6 +8,7 @@
     to: string;
   }
 
+  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
   import Trash from "$lib/components/icons/Trash.svelte";
 
   const focusRings: Record<string, string> = {
@@ -87,12 +88,18 @@
             <td class="px-4 py-3">
               <div class="relative inline-block">
                 <span
-                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-xs text-slate-600"
-                  >$</span
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2"
                 >
+                  <CurrencyEuro class="size-3.5 text-slate-600" />
+                </span>
                 <input
                   type="number"
-                  bind:value={items[i].amount}
+                  step="0.01"
+                  value={items[i].amount / 100}
+                  oninput={(e) => {
+                    const v = parseFloat(e.currentTarget.value);
+                    if (!Number.isNaN(v)) items[i].amount = Math.round(v * 100);
+                  }}
                   {onfocus}
                   class="w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-6 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 {focusRing}"
                 >

@@ -1,10 +1,9 @@
 <script lang="ts">
+  import Trash from "$lib/components/icons/Trash.svelte";
   import type { Expense } from "$lib/types";
   import { fmt, personColor } from "$lib/utils";
   import Avatar from "./Avatar.svelte";
   import EmptyState from "./EmptyState.svelte";
-
-  import Trash from "$lib/components/icons/Trash.svelte";
 
   let {
     expenses,

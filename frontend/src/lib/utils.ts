@@ -17,6 +17,11 @@ export function personColor(name: string): string {
   return colors[Math.abs(hash) % colors.length];
 }
 
+const eur = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "EUR",
+});
+
 export function fmt(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return eur.format(cents / 100);
 }

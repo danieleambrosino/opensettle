@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import CurrencyDollar from "$lib/components/icons/CurrencyDollar.svelte";
+  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
 
   let { message, children }: { message: string; children?: Snippet } = $props();
 </script>
@@ -13,7 +13,7 @@
     {#if children}
       {@render children()}
     {:else}
-      <CurrencyDollar class="size-7 text-slate-600" />
+      <CurrencyEuro class="size-7 text-slate-600" />
     {/if}
   </div>
   <p class="text-sm text-slate-500">{message}</p>

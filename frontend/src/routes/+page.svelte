@@ -1,22 +1,24 @@
 <script lang="ts">
   import AutoSync from "$lib/components/AutoSync.svelte";
   import BalanceTable from "$lib/components/BalanceTable.svelte";
-  import DocumentIcon from "$lib/components/icons/Document.svelte";
-  import Banknotes from "$lib/components/icons/Banknotes.svelte";
-  import CheckCircle from "$lib/components/icons/CheckCircle.svelte";
+  import DataActions from "$lib/components/DataActions.svelte";
   import ExpenseForm from "$lib/components/ExpenseForm.svelte";
   import ExpenseTable from "$lib/components/ExpenseTable.svelte";
   import FromToTable from "$lib/components/FromToTable.svelte";
   import Hero from "$lib/components/Hero.svelte";
+  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
+  import CheckCircle from "$lib/components/icons/CheckCircle.svelte";
+  import DocumentIcon from "$lib/components/icons/Document.svelte";
   import SectionCard from "$lib/components/SectionCard.svelte";
   import {
     computeBalances,
     computeMinimalSettlementSet,
     splitExpenses,
   } from "$lib/index";
+  import { loadExpenses, saveExpenses } from "$lib/storage";
   import type { Balance, Expense, Obligation, Settlement } from "$lib/types";
 
-  let expenses = $state<Expense[]>([]);
+  let expenses = $state<Expense[]>(loadExpenses() ?? []);
   let obligations = $state<Obligation[]>([]);
   let balances = $state<Balance[]>([]);
   let settlements = $state<Settlement[]>([]);
@@ -53,6 +55,10 @@
     }
   });
 
+  $effect(() => {
+    saveExpenses(expenses);
+  });
+
   function syncObligations() {
     autoSyncObligations = true;
   }
@@ -84,6 +90,24 @@
   }
   function removeExpense(idx: number) {
     expenses = expenses.filter((_, i) => i !== idx);
+  }
+
+  function handleImport(data: {
+    expenses: Expense[];
+    obligations: Obligation[];
+    balances: Balance[];
+    settlements: Settlement[];
+    autoSyncObligations: boolean;
+    autoSyncBalances: boolean;
+    autoSyncSettlements: boolean;
+  }) {
+    expenses = data.expenses;
+    obligations = data.obligations;
+    balances = data.balances;
+    settlements = data.settlements;
+    autoSyncObligations = data.autoSyncObligations;
+    autoSyncBalances = data.autoSyncBalances;
+    autoSyncSettlements = data.autoSyncSettlements;
   }
 
   type StepId = "expenses" | "obligations" | "balances" | "settlements";
@@ -120,6 +144,19 @@
   class="min-h-screen bg-linear-to-br from-slate-950 via-indigo-950 to-slate-950"
 >
   <Hero {steps} />
+
+  <div class="mx-auto max-w-6xl px-4 pb-4 flex justify-end">
+    <DataActions
+      {expenses}
+      {obligations}
+      {balances}
+      {settlements}
+      {autoSyncObligations}
+      {autoSyncBalances}
+      {autoSyncSettlements}
+      onImport={handleImport}
+    />
+  </div>
 
   <div class="mx-auto max-w-6xl space-y-6 px-4 pb-16">
     <!-- ══════════ STEP 1: EXPENSES ══════════ -->
@@ -167,7 +204,7 @@
         emptyMessage="Balances appear automatically when obligations are available"
       >
         {#snippet empty()}
-          <Banknotes class="size-7 text-slate-600" />
+          <CurrencyEuro class="size-7 text-slate-600" />
         {/snippet}
       </BalanceTable>
     </SectionCard>

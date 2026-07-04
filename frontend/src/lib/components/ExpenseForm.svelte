@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { Participant } from "$lib/types";
+  import Plus from "$lib/components/icons/Plus.svelte";
+  import CurrencyEuro from "$lib/components/icons/CurrencyEuro.svelte";
 
   import Trash from "$lib/components/icons/Trash.svelte";
-  import Plus from "$lib/components/icons/Plus.svelte";
+  import type { Participant } from "$lib/types";
 
   let newPayer = $state("");
   let newAmount = $state("");
@@ -28,7 +29,7 @@
   } = $props();
 
   function addExpense() {
-    const amountNum = Number.parseInt(newAmount, 10);
+    const amountNum = Math.round(Number.parseFloat(newAmount) * 100);
     if (!newPayer.trim() || Number.isNaN(amountNum) || amountNum <= 0) {
       return;
     }
@@ -36,7 +37,9 @@
       .filter((p) => p.person.trim())
       .map((p) => ({
         person: p.person.trim(),
-        amount: p.amount.trim() ? Number.parseInt(p.amount.trim(), 10) : null,
+        amount: p.amount.trim()
+          ? Math.round(Number.parseFloat(p.amount.trim()) * 100)
+          : null,
       }));
     if (participants.length === 0) {
       return;
@@ -74,9 +77,10 @@
       >
       <div class="relative">
         <span
-          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm text-slate-500"
-          >$</span
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
         >
+          <CurrencyEuro class="size-4 text-slate-500" />
+        </span>
         <input
           id="new-amount"
           type="number"
@@ -103,9 +107,10 @@
         >
         <div class="relative w-36">
           <span
-            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs text-slate-600"
-            >$</span
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5"
           >
+            <CurrencyEuro class="size-3.5 text-slate-600" />
+          </span>
           <input
             type="number"
             placeholder="optional"
