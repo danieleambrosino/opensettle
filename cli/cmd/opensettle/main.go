@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"io"
 	"log"
 	"os"
 
@@ -11,41 +13,47 @@ import (
 func main() {
 	args := os.Args[1:]
 
-	if len(args) == 1 && args[0] == "split" {
-		expenses, err := cli.ReadExpenses(os.Stdin)
-		if err != nil {
-			log.Fatal(err)
-		}
-		obligations := service.SplitExpenses(expenses)
-		err = cli.WriteObligations(os.Stdout, obligations)
-		if err != nil {
-			log.Fatal(err)
-		}
+	if len(args) >= 1 && args[0] == "split" {
+		runSplit(os.Stdin, os.Stdout)
 		return
 	}
 
-	if len(args) == 1 && args[0] == "minimize" {
-		obligations, err := cli.ReadObligations(os.Stdin)
-		if err != nil {
-			log.Fatal(err)
-		}
-		balances := service.ComputeBalances(obligations)
-		settlements := service.ComputeMinimalSettlementSet(balances)
-		err = cli.WriteSettlements(os.Stdout, settlements)
-		if err != nil {
-			log.Fatal(err)
-		}
+	if len(args) >= 1 && args[0] == "minimize" {
+		runMinimize(os.Stdin, os.Stdout)
 		return
 	}
 
-	expenses, err := cli.ReadExpenses(os.Stdin)
+	if len(args) >= 1 {
+		log.Fatalf("unknown subcommand: %s\n", args[0])
+	}
+
+	runSettle(os.Stdin, os.Stdout)
+}
+
+func runSettle(r io.Reader, w io.Writer) {
+	var buf bytes.Buffer
+	runSplit(r, &buf)
+	runMinimize(&buf, w)
+}
+
+func runSplit(r io.Reader, w io.Writer) {
+	expenses, err := cli.ReadExpenses(r)
 	if err != nil {
 		log.Fatal(err)
 	}
-	obligations := service.SplitExpenses(expenses)
+	err = cli.WriteObligations(w, service.SplitExpenses(expenses))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func runMinimize(r io.Reader, w io.Writer) {
+	obligations, err := cli.ReadObligations(r)
+	if err != nil {
+		log.Fatal(err)
+	}
 	balances := service.ComputeBalances(obligations)
-	settlements := service.ComputeMinimalSettlementSet(balances)
-	err = cli.WriteSettlements(os.Stdout, settlements)
+	err = cli.WriteSettlements(w, service.ComputeMinimalSettlementSet(balances))
 	if err != nil {
 		log.Fatal(err)
 	}
