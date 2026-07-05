@@ -60,11 +60,11 @@ Binaries land in `cli/bin/`.
 
 ### Commands
 
-| Input | Command | Output |
-|-------|---------|--------|
-| `Expense[]` | `expense-splitter` | `Obligation[]` |
-| `Obligation[]` | `debt-minimizer` | `Settlement[]` |
-| `Expense[]` | `opensettle` (all-in-one) | `Settlement[]` |
+| Input | Subcommand | Output |
+|-------|------------|--------|
+| `Expense[]` | `opensettle split` | `Obligation[]` |
+| `Obligation[]` | `opensettle minimize` | `Settlement[]` |
+| `Expense[]` | `opensettle` (default) | `Settlement[]` |
 
 ### Usage
 
@@ -77,9 +77,9 @@ cat expenses.json | go run ./cli/cmd/opensettle
 **Step by step (inspect or edit intermediates):**
 
 ```bash
-cat expenses.json | go run ./cli/cmd/expense-splitter > obligations.json
+cat expenses.json | go run ./cli/cmd/opensettle split > obligations.json
 # optionally: vim obligations.json, fix a share
-cat obligations.json | go run ./cli/cmd/debt-minimizer > settlements.json
+cat obligations.json | go run ./cli/cmd/opensettle minimize > settlements.json
 ```
 
 ### Input format
@@ -124,9 +124,7 @@ doesn't fit reality and someone should pay a bit less.
 ```
 ├── cli/
 │   ├── cmd/
-│   │   ├── opensettle/          # all-in-one command
-│   │   ├── expense-splitter/   # Expense[] → Obligation[]
-│   │   └── debt-minimizer/     # Obligation[] → Settlement[]
+│   │   └── opensettle/          # single binary with subcommands
 │   ├── internal/
 │   │   ├── types/types.go      # PersonID, Expense, Obligation, etc.
 │   │   ├── service/            # split, balance, settlement logic
@@ -155,14 +153,14 @@ through `jq`.
 I wanted to learn it. Zero dependencies felt like a nice constraint.
 The result is a single static binary per command.
 
-**Why two separate CLI commands (and one combined)?**  
-Unix philosophy: do one thing and do it well. The separate commands let
-you pipe, inspect, and edit the intermediate data. The combined `opensettle`
-is just a convenience wrapper.
+**Why subcommands instead of separate binaries?**  
+Unix philosophy: do one thing and do it well. The subcommands `split` and
+`minimize` let you pipe, inspect, and edit the intermediate data. The
+default mode (no subcommand) is just a convenience wrapper.
 
 **Can I tweak the intermediate results?**  
-Yes — that's the whole point. Run `expense-splitter`, edit the JSON,
-run `debt-minimizer`. The webapp has a toggle to turn off auto-sync
+Yes — that's the whole point. Run `opensettle split`, edit the JSON,
+run `opensettle minimize`. The webapp has a toggle to turn off auto-sync
 at each stage for the same reason.
 
 **Why is there both a CLI and a webapp?**  
