@@ -1,10 +1,8 @@
-.PHONY: all build bin/opensettle clean
+.PHONY: all build clean
 
 all: build
 
-build: bin/opensettle
-
-bin/opensettle:
+build:
 	go build -o bin/opensettle ./cmd/opensettle
 
 clean:
