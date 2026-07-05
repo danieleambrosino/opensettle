@@ -19,9 +19,9 @@ And I wanted a tool that works the Unix way — small composable commands
 that pipe JSON around, so I can inspect, edit, or rewire the intermediate
 results if someone's share doesn't feel right.
 
-So I built a CLI. Then I thought: why not a GUI too? I wanted to try
-SvelteKit, and having a visual version of the same pipeline felt like
-a good excuse. The algorithm ended up implemented twice — Go for the CLI,
+So I built a CLI. Then I thought: why not a GUI too? Having a visual
+version of the same pipeline felt like a good excuse to build something
+with SvelteKit. The algorithm ended up implemented twice — Go for the CLI,
 TypeScript for the webapp. Who cares. It's a side project, and writing
 the same thing in two languages was half the fun.
 
@@ -35,7 +35,7 @@ Consider it my pair programmer for the frontend bits.
 # Three friends, one dinner
 echo '[{"payer":"Alice","amount":3000,"participants":[
   {"person":"Alice"},{"person":"Bob"},{"person":"Charlie"}
-]}]' | go run ./cli/cmd/opensettle
+]}]' | opensettle
 ```
 
 Output:
@@ -55,6 +55,8 @@ Same thing in the browser: [danieleambrosino.github.io/opensettle](https://danie
 ```bash
 cd cli
 make
+# then: export PATH=$PATH:cli/bin
+# or:  cp cli/bin/opensettle ~/.local/bin/
 ```
 
 Binaries land in `cli/bin/`.
@@ -72,15 +74,15 @@ Binaries land in `cli/bin/`.
 **All-in-one (from expenses to settlements):**
 
 ```bash
-cat expenses.json | go run ./cli/cmd/opensettle
+cat expenses.json | opensettle
 ```
 
 **Step by step (inspect or edit intermediates):**
 
 ```bash
-cat expenses.json | go run ./cli/cmd/opensettle split > obligations.json
+cat expenses.json | opensettle split > obligations.json
 # optionally: vim obligations.json, fix a share
-cat obligations.json | go run ./cli/cmd/opensettle minimize > settlements.json
+cat obligations.json | opensettle minimize > settlements.json
 ```
 
 ### Input format
@@ -195,8 +197,7 @@ at each stage for the same reason.
 **Why is there both a CLI and a webapp?**  
 Different tools for different moments. The CLI is great for batch,
 automation, and terminal people. The webapp is for everyone else
-who just wants to fill a form and see who owes what. And I wanted
-to learn SvelteKit.
+who just wants to fill a form and see who owes what.
 
 **Wait, the algorithm is implemented twice?**  
 Yes, Go and TypeScript. Same logic, different syntax. It's a learning
