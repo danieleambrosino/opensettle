@@ -1,24 +1,59 @@
 # OpenSettle
 
-Minimal group expense settlement. CLI + webapp.
+Splits expenses and minimises the transfers needed to settle the group.
 
+Try it in the browser: [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
+
+## Quick start
+
+Four friends go out. Alice pays for dinner (€240), Bob for drinks (€180),
+Charlie for snacks (€120). Diana pays nothing.
+
+Create `expenses.json` (all amounts are in **cents**: €1.00 = 100):
+
+```json
+[
+  {"payer": "Alice", "amount": 24000, "participants": [
+    {"person": "Alice"}, {"person": "Bob"}, {"person": "Charlie"}, {"person": "Diana"}
+  ]},
+  {"payer": "Bob", "amount": 18000, "participants": [
+    {"person": "Bob"}, {"person": "Charlie"}, {"person": "Diana"}
+  ]},
+  {"payer": "Charlie", "amount": 12000, "participants": [
+    {"person": "Charlie"}, {"person": "Diana"}
+  ]}
+]
 ```
+
+Then run:
+
+```bash
 opensettle < expenses.json
+```
+
+The tool figures out who owes whom and minimises transfers — only 2
+transactions needed instead of the naive 3-or-more.
+
+Output:
+
+```json
+[
+  {"from": "Diana", "to": "Alice", "amount": 18000},
+  {"from": "Charlie", "to": "Bob", "amount": 6000}
+]
 ```
 
 ## Backstory
 
 I was organising a group gift. Multiple people bought different things,
 and at the end we needed to split everything fairly. Some people wanted
-to contribute less than others.
+to contribute a different amount.
 
 I could have used Tricount or Splitwise. But where's the fun in that?
 
-The problem is deceptively simple: split some expenses, then figure out who pays whom to settle everyone with as few transactions as possible. That second part — the Minimum Transaction Problem — is what hooked me. Easy on the surface, but finding the truly minimal set of transactions is NP-hard. The tension between a simple question and a hard problem fascinated me.
+The problem is deceptively simple: split some expenses, then figure out who pays whom to settle everyone with as few transactions as possible. That second part — the [Minimum Transaction Problem](MTP.md) — is what hooked me. Easy on the surface, but finding the truly minimal set of transactions is NP-hard. The tension between a simple question and a hard problem fascinated me.
 
-I wanted to write the splitting algorithm myself. I wanted to improve my Go.
-And I wanted a tool that works the Unix way — small composable commands
-that pipe JSON around, so I can inspect, edit, or rewire the intermediate
+I wanted to write the splitting algorithm myself, improve my Go and write a tool that works the Unix way — small composable commands that pipe JSON around, so I can inspect, edit, or rewire the intermediate
 results if someone's share doesn't feel right.
 
 So I built a CLI. Then I thought: why not a GUI too? Having a visual
@@ -30,39 +65,6 @@ the same thing in two languages was half the fun 🙂
 All algorithms are hand-written. The webapp UI — the Svelte components,
 layout, and styling — was built with some help from DeepSeek V4 Flash.
 Consider it my pair programmer for the frontend bits 🙂
-
-## Quick start
-
-Create `expenses.json`:
-
-```json
-[
-  {"payer": "Alice", "amount": 3000, "participants": [
-    {"person": "Alice"},
-    {"person": "Bob"},
-    {"person": "Charlie"}
-  ]}
-]
-```
-
-Then run:
-
-```bash
-opensettle < expenses.json
-```
-
-Output:
-
-```json
-[
-  {"from": "Bob", "to": "Alice", "amount": 1000},
-  {"from": "Charlie", "to": "Alice", "amount": 1000}
-]
-```
-
-Alice paid €30 for the dinner. Bob and Charlie each owe Alice €10.
-
-Same thing in the browser: [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
 
 ## CLI
 
@@ -77,12 +79,6 @@ cd cli && make
 Binaries land in `cli/bin/`.
 
 ### Usage
-
-**All-in-one (from expenses to settlements):**
-
-```bash
-opensettle < expenses.json
-```
 
 **Step by step (inspect or edit intermediates):**
 
@@ -110,14 +106,12 @@ opensettle minimize < obligations.json > settlements.json
 
 A participant with an explicit `amount` pays that much (capped at the
 remaining). Everyone else splits the rest equally, with leftover cents
-distributed one by one. The payer is skipped (they already paid).
-
-Amounts are in cents. `32000` = €320, `5000` = €50, `3000` = €30.
+distributed one by one. The payer is skipped.
 
 ## Web app
 
 A self-contained SvelteKit frontend. Same pipeline, but visual and
-interactive. Runs entirely in the browser — no backend needed.
+interactive. Runs entirely in the browser.
 
 **Live demo:** [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
 
@@ -133,25 +127,6 @@ Each stage auto-syncs from the previous one. But you can turn off
 auto-sync and edit the data by hand — useful when the equal split
 doesn't fit reality and someone should pay a bit less.
 
-## How it works
-
-Three functions, ~100 lines each.
-
-**SplitExpenses**  
-For each expense: participants with a fixed amount pay that (capped).
-The rest is divided equally, with leftover cents distributed one at a
-time. Skip the payer.
-
-**ComputeBalances**  
-Algebraic sum of obligations. Every `to` adds, every `from` subtracts.
-Result is sorted by amount (asc), then by person.
-
-**ComputeMinimalSettlementSet**  
-This is the **Minimum Transaction Problem**. Finding the optimal
-solution is NP-hard (subset sum), so the tool uses a greedy max-heap
-heuristic. Pair the biggest debtor with the biggest creditor, settle
-the minimum, repeat. Produces at most n-1 transactions (n = people).
-
 ## Q&A
 
 **Why not Tricount / Splitwise?**  
@@ -160,22 +135,9 @@ something in the process. Also, Tricount doesn't let me pipe stuff
 through `jq` 🙂
 
 **Why Go?**  
-I knew it already, but I wanted to get better. Zero dependencies felt
-like a nice constraint. The result is a single static binary.
-
-**What's the Minimum Transaction Problem?**  
-Given a set of debts between a group, find the smallest set of
-transactions that settles everyone. It's related to subset sum and is
-NP-hard — the optimal solution requires exponential time in the worst
-case.
-
-**Why a greedy algorithm instead of the optimal one?**  
-Because the optimal solution is NP-hard, and for a side project it
-wasn't worth implementing. The greedy max-heap heuristic is dead
-simple, runs in O(n log n), and produces at most n-1 transactions
-(where n is the number of people). For the kind of groups that use
-this tool (dinners, trips, gifts) the result is indistinguishable
-from optimal. If you're settling millions of transactions, call me 🙂
+I wanted to have fun with a language I use less frequently than others
+and have always admired. Zero dependencies felt like a nice constraint.
+The result is a single static binary.
 
 **Why subcommands instead of separate binaries?**  
 Separate binaries would be more Unix-pure, but one binary is easier
@@ -195,8 +157,14 @@ who just wants to fill a form and see who owes what.
 
 **Wait, the algorithm is implemented twice?**  
 Yes, Go and TypeScript. Same logic, different syntax. Writing the same
-thing in two languages was half the fun, and it means the webapp doesn't
-need a backend — it runs the same pipeline entirely in the browser.
+thing in two languages was half the fun, and it runs the same pipeline
+entirely in the browser.
+
+**Why not compile Go to WASM for the webapp?**  
+I didn't like the idea of shipping several MB of WebAssembly over HTTP
+for something I could implement in a handful of lines of TypeScript.
+I might do it for fun and profit to observe the WASM world more closely
+🙂
 
 ## License
 
