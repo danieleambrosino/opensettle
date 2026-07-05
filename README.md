@@ -14,7 +14,7 @@ to contribute less than others.
 
 I could have used Tricount or Splitwise. But where's the fun in that?
 
-I wanted to write the splitting algorithm myself. I wanted to learn Go.
+I wanted to write the splitting algorithm myself. I wanted to improve my Go.
 And I wanted a tool that works the Unix way — small composable commands
 that pipe JSON around, so I can inspect, edit, or rewire the intermediate
 results if someone's share doesn't feel right.
@@ -29,23 +29,24 @@ All algorithms are hand-written. The webapp UI — the Svelte components,
 layout, and styling — was built with some help from DeepSeek V4 Flash.
 Consider it my pair programmer for the frontend bits.
 
-## How it works
+## Quick start
 
-Three functions, ~100 lines each.
+```bash
+# Three friends, one dinner
+echo '[{"payer":"Alice","amount":3000,"participants":[
+  {"person":"Alice"},{"person":"Bob"},{"person":"Charlie"}
+]}]' | go run ./cli/cmd/opensettle
+```
 
-**SplitExpenses**  
-For each expense: participants with a fixed amount pay that (capped).
-The rest is divided equally, with leftover cents distributed one at a
-time. Skip the payer.
+Output:
+```json
+[{"from":"Bob","to":"Alice","amount":1000},
+ {"from":"Charlie","to":"Alice","amount":1000}]
+```
 
-**ComputeBalances**  
-Algebraic sum of obligations. Every `to` adds, every `from` subtracts.
-Result is sorted by amount (asc), then by person.
+Alice paid €30 for the dinner. Bob and Charlie each owe Alice €10.
 
-**ComputeMinimalSettlementSet**  
-Greedy algorithm using a max-heap. Pair the biggest debtor with the
-biggest creditor, settle the minimum, repeat until everyone's at zero.
-Produces at most n-1 transactions.
+Same thing in the browser: [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
 
 ## CLI
 
@@ -107,6 +108,8 @@ distributed one by one. The payer is skipped (they already paid).
 A self-contained SvelteKit frontend. Same pipeline, but visual and
 interactive. Runs entirely in the browser — no backend needed.
 
+**Live demo:** [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
+
 ```bash
 cd webapp
 npm install
@@ -118,6 +121,24 @@ npm run dev
 Each stage auto-syncs from the previous one. But you can turn off
 auto-sync and edit the data by hand — useful when the equal split
 doesn't fit reality and someone should pay a bit less.
+
+## How it works
+
+Three functions, ~100 lines each.
+
+**SplitExpenses**  
+For each expense: participants with a fixed amount pay that (capped).
+The rest is divided equally, with leftover cents distributed one at a
+time. Skip the payer.
+
+**ComputeBalances**  
+Algebraic sum of obligations. Every `to` adds, every `from` subtracts.
+Result is sorted by amount (asc), then by person.
+
+**ComputeMinimalSettlementSet**  
+Greedy algorithm using a max-heap. Pair the biggest debtor with the
+biggest creditor, settle the minimum, repeat until everyone's at zero.
+Produces at most n-1 transactions.
 
 ## Project structure
 
@@ -135,11 +156,19 @@ doesn't fit reality and someone should pay a bit less.
 ├── webapp/
 │   └── src/
 │       ├── lib/components/     # Svelte components
-│       ├── lib/index.ts        # split, balance, settlement (TS)
+│       ├── lib/split.ts        # split, balance, settlement (TS)
+│       ├── lib/balance.ts
+│       ├── lib/settlement.ts
 │       ├── lib/storage.ts      # localStorage persistence
 │       └── routes/             # SvelteKit pages
 │
 └── test.json                   # example input
+```
+
+## Tests
+
+```bash
+cd cli && go test ./...
 ```
 
 ## Q&A
