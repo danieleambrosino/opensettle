@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -10,7 +11,16 @@ import (
 	"danieleambrosino.it/opensettle/internal/service"
 )
 
+const usage = `Usage: opensettle [split|minimize]
+
+Subcommands:
+  opensettle          Expense[] → Settlement[]  (default)
+  opensettle split    Expense[] → Obligation[]
+  opensettle minimize Obligation[] → Settlement[]
+`
+
 func main() {
+	log.SetFlags(0)
 	args := os.Args[1:]
 
 	if len(args) >= 1 && args[0] == "split" {
@@ -24,7 +34,11 @@ func main() {
 	}
 
 	if len(args) >= 1 {
-		log.Fatalf("unknown subcommand: %s\n", args[0])
+		if args[0] == "-h" || args[0] == "--help" {
+			fmt.Fprint(os.Stderr, usage)
+			os.Exit(0)
+		}
+		log.Fatalf("unknown subcommand: %s\n\n%s", args[0], usage)
 	}
 
 	runSettle(os.Stdin, os.Stdout)
