@@ -21,7 +21,7 @@ Here only what an AI agent needs to write code.
 | `cli/internal/service/balance_test.go` | Test ComputeBalances |
 | `cli/internal/service/settlement_test.go` | Test settlement |
 | `cli/internal/cli/io.go` | JSON read/write helpers |
-| `cli/cmd/settle/main.go` | All-in-one CLI |
+| `cli/cmd/opensettle/main.go` | All-in-one CLI |
 | `cli/cmd/expense-splitter/main.go` | Expense[] → Obligation[] |
 | `cli/cmd/debt-minimizer/main.go` | Obligation[] → Settlement[] |
 | `cli/Makefile` | Build targets |

@@ -64,14 +64,14 @@ Binaries land in `cli/bin/`.
 |-------|---------|--------|
 | `Expense[]` | `expense-splitter` | `Obligation[]` |
 | `Obligation[]` | `debt-minimizer` | `Settlement[]` |
-| `Expense[]` | `settle` (all-in-one) | `Settlement[]` |
+| `Expense[]` | `opensettle` (all-in-one) | `Settlement[]` |
 
 ### Usage
 
 **All-in-one (from expenses to settlements):**
 
 ```bash
-cat expenses.json | go run ./cli/cmd/settle
+cat expenses.json | go run ./cli/cmd/opensettle
 ```
 
 **Step by step (inspect or edit intermediates):**
@@ -124,7 +124,7 @@ doesn't fit reality and someone should pay a bit less.
 ```
 ├── cli/
 │   ├── cmd/
-│   │   ├── settle/             # all-in-one command
+│   │   ├── opensettle/          # all-in-one command
 │   │   ├── expense-splitter/   # Expense[] → Obligation[]
 │   │   └── debt-minimizer/     # Obligation[] → Settlement[]
 │   ├── internal/
@@ -157,7 +157,7 @@ The result is a single static binary per command.
 
 **Why two separate CLI commands (and one combined)?**  
 Unix philosophy: do one thing and do it well. The separate commands let
-you pipe, inspect, and edit the intermediate data. The combined `settle`
+you pipe, inspect, and edit the intermediate data. The combined `opensettle`
 is just a convenience wrapper.
 
 **Can I tweak the intermediate results?**  

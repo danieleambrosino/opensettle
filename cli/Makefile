@@ -1,8 +1,8 @@
-.PHONY: all build bin/debt-minimizer bin/expense-splitter bin/settle clean
+.PHONY: all build bin/debt-minimizer bin/expense-splitter bin/opensettle clean
 
 all: build
 
-build: bin/debt-minimizer bin/expense-splitter bin/settle
+build: bin/debt-minimizer bin/expense-splitter bin/opensettle
 
 bin/debt-minimizer:
 	go build -o bin/debt-minimizer ./cmd/debt-minimizer
@@ -10,8 +10,8 @@ bin/debt-minimizer:
 bin/expense-splitter:
 	go build -o bin/expense-splitter ./cmd/expense-splitter
 
-bin/settle:
-	go build -o bin/settle ./cmd/settle
+bin/opensettle:
+	go build -o bin/opensettle ./cmd/opensettle
 
 clean:
 	rm -rf bin/
