@@ -33,17 +33,31 @@ Consider it my pair programmer for the frontend bits 🙂
 
 ## Quick start
 
+Create `expenses.json`:
+
+```json
+[
+  {"payer": "Alice", "amount": 3000, "participants": [
+    {"person": "Alice"},
+    {"person": "Bob"},
+    {"person": "Charlie"}
+  ]}
+]
+```
+
+Then run:
+
 ```bash
-# Three friends, one dinner
-echo '[{"payer":"Alice","amount":3000,"participants":[
-  {"person":"Alice"},{"person":"Bob"},{"person":"Charlie"}
-]}]' | opensettle
+opensettle < expenses.json
 ```
 
 Output:
+
 ```json
-[{"from":"Bob","to":"Alice","amount":1000},
- {"from":"Charlie","to":"Alice","amount":1000}]
+[
+  {"from": "Bob", "to": "Alice", "amount": 1000},
+  {"from": "Charlie", "to": "Alice", "amount": 1000}
+]
 ```
 
 Alice paid €30 for the dinner. Bob and Charlie each owe Alice €10.
@@ -54,22 +68,13 @@ Same thing in the browser: [danieleambrosino.github.io/opensettle](https://danie
 
 ### Build
 
+Requires Go 1.26+.
+
 ```bash
-cd cli
-make
-# then: export PATH=$PATH:cli/bin
-# or:  cp cli/bin/opensettle ~/.local/bin/
+cd cli && make
 ```
 
 Binaries land in `cli/bin/`.
-
-### Commands
-
-| Input | Subcommand | Output |
-|-------|------------|--------|
-| `Expense[]` | `opensettle split` | `Obligation[]` |
-| `Obligation[]` | `opensettle minimize` | `Settlement[]` |
-| `Expense[]` | `opensettle` (default) | `Settlement[]` |
 
 ### Usage
 
@@ -106,6 +111,8 @@ opensettle minimize < obligations.json > settlements.json
 A participant with an explicit `amount` pays that much (capped at the
 remaining). Everyone else splits the rest equally, with leftover cents
 distributed one by one. The payer is skipped (they already paid).
+
+Amounts are in cents. `32000` = €320, `5000` = €50, `3000` = €30.
 
 ## Web app
 
