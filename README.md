@@ -150,7 +150,7 @@ Result is sorted by amount (asc), then by person.
 This is the **Minimum Transaction Problem**. Finding the optimal
 solution is NP-hard (subset sum), so the tool uses a greedy max-heap
 heuristic. Pair the biggest debtor with the biggest creditor, settle
-the minimum, repeat. Produces at most n-1 transactions.
+the minimum, repeat. Produces at most n-1 transactions (n = people).
 
 ## Q&A
 
@@ -161,8 +161,7 @@ through `jq` 🙂
 
 **Why Go?**  
 I knew it already, but I wanted to get better. Zero dependencies felt
-like a nice constraint. The result is a single static binary per
-command.
+like a nice constraint. The result is a single static binary.
 
 **What's the Minimum Transaction Problem?**  
 Given a set of debts between a group, find the smallest set of
@@ -173,20 +172,21 @@ case.
 **Why a greedy algorithm instead of the optimal one?**  
 Because the optimal solution is NP-hard, and for a side project it
 wasn't worth implementing. The greedy max-heap heuristic is dead
-simple, runs in O(n log n), and produces at most n-1 transactions.
-For the kind of groups that use this tool (dinners, trips, gifts) the
-result is indistinguishable from optimal. If you're settling millions
-of transactions, call me 🙂
+simple, runs in O(n log n), and produces at most n-1 transactions
+(where n is the number of people). For the kind of groups that use
+this tool (dinners, trips, gifts) the result is indistinguishable
+from optimal. If you're settling millions of transactions, call me 🙂
 
 **Why subcommands instead of separate binaries?**  
-Unix philosophy: do one thing and do it well. The subcommands `split` and
-`minimize` let you pipe, inspect, and edit the intermediate data. The
-default mode (no subcommand) is just a convenience wrapper.
+Separate binaries would be more Unix-pure, but one binary is easier
+to install and keep on the PATH. The subcommands still enforce the
+pipeline: `split` and `minimize` are independent stages you can pipe
+through. The default mode is just sugar for the common case.
 
 **Can I tweak the intermediate results?**  
-Yes — that's the whole point. Run `opensettle split`, edit the JSON,
-run `opensettle minimize`. The webapp has a toggle to turn off auto-sync
-at each stage for the same reason.
+Yes. Run `opensettle split`, edit the JSON, run `opensettle minimize`.
+The webapp has a toggle to turn off auto-sync at each stage for the
+same reason.
 
 **Why is there both a CLI and a webapp?**  
 Different tools for different moments. The CLI is great for batch,
@@ -194,10 +194,9 @@ automation, and terminal people. The webapp is for everyone else
 who just wants to fill a form and see who owes what.
 
 **Wait, the algorithm is implemented twice?**  
-Yes, Go and TypeScript. Same logic, different syntax. It's a learning
-project — rewriting the same thing in another language is a great way
-to spot design flaws and appreciate language quirks. Plus the webapp
-doesn't need a backend.
+Yes, Go and TypeScript. Same logic, different syntax. Writing the same
+thing in two languages was half the fun, and it means the webapp doesn't
+need a backend — it runs the same pipeline entirely in the browser.
 
 ## License
 
