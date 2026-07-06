@@ -1,6 +1,6 @@
-import { clsx } from "clsx";
 import { Index, type JSX, Show } from "solid-js";
 import Avatar from "@/lib/components/avatar";
+import EmptyState from "@/lib/components/empty-state";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 import Trash from "@/lib/components/icons/trash";
 import type { Balance } from "@/lib/types";
@@ -85,12 +85,12 @@ export default function BalanceTable(props: Props) {
                             <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
                           </span>
                           <input
-                            class={clsx(
-                              "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium font-mono text-sm transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 max-sm:w-24 sm:w-28",
-                              item().amount < 0 && "text-red-400",
-                              item().amount > 0 && "text-emerald-400",
-                              item().amount === 0 && "text-slate-400"
-                            )}
+                            classList={{
+                              "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium font-mono text-sm transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 max-sm:w-24 sm:w-28": true,
+                              "text-emerald-400": item().amount > 0,
+                              "text-red-400": item().amount < 0,
+                              "text-slate-400": item().amount === 0,
+                            }}
                             onFocus={props.onfocus}
                             onInput={(e) =>
                               updateAmount(i, e.currentTarget.value)
@@ -101,12 +101,12 @@ export default function BalanceTable(props: Props) {
                           />
                         </div>
                         <span
-                          class={clsx(
-                            "font-medium text-xs",
-                            item().amount < 0 && "text-red-400",
-                            item().amount > 0 && "text-emerald-400",
-                            item().amount === 0 && "text-slate-500"
-                          )}
+                          classList={{
+                            "font-medium text-xs": true,
+                            "text-emerald-400": item().amount > 0,
+                            "text-red-400": item().amount < 0,
+                            "text-slate-500": item().amount === 0,
+                          }}
                         >
                           {statusLabel(item().amount)}
                         </span>
@@ -130,14 +130,9 @@ export default function BalanceTable(props: Props) {
         </div>
       </Show>
       <Show when={props.items.length === 0 && props.children}>
-        <div class="flex flex-col items-center justify-center py-10 text-center">
-          <div class="mb-3 flex size-14 items-center justify-center rounded-2xl bg-slate-800/60 ring-1 ring-slate-700/50">
-            {props.children}
-          </div>
-          <p class="text-slate-500 text-sm">
-            {props.emptyMessage ?? "No items yet"}
-          </p>
-        </div>
+        <EmptyState message={props.emptyMessage ?? "No items yet"}>
+          {props.children}
+        </EmptyState>
       </Show>
     </>
   );

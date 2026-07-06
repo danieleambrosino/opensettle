@@ -1,6 +1,6 @@
-import { clsx } from "clsx";
 import { Index, Show } from "solid-js";
 import Avatar from "@/lib/components/avatar";
+import EmptyState from "@/lib/components/empty-state";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 import Plus from "@/lib/components/icons/plus";
 import Trash from "@/lib/components/icons/trash";
@@ -8,7 +8,6 @@ import type { Expense } from "@/lib/types";
 import { personColor } from "@/lib/utils";
 
 interface Props {
-  accent?: string;
   items: Expense[];
   onItemsChange: (items: Expense[]) => void;
   onRemove?: (index: number) => void;
@@ -24,7 +23,7 @@ export default function ExpenseTable(props: Props) {
   function addParticipant(i: number) {
     updateItem(i, (exp) => ({
       ...exp,
-      participants: [...exp.participants, { person: "", amount: null }],
+      participants: [...exp.participants, { amount: null, person: "" }],
     }));
   }
 
@@ -37,14 +36,7 @@ export default function ExpenseTable(props: Props) {
 
   return (
     <Show
-      fallback={
-        <div class="flex flex-col items-center justify-center py-10 text-center">
-          <div class="mb-3 flex size-14 items-center justify-center rounded-2xl bg-slate-800/60 ring-1 ring-slate-700/50">
-            <CurrencyEuro class="size-7 text-slate-600" />
-          </div>
-          <p class="text-slate-500 text-sm">No expenses yet — add one above</p>
-        </div>
-      }
+      fallback={<EmptyState message="No expenses yet — add one above" />}
       when={props.items.length > 0}
     >
       <div class="overflow-x-auto rounded-xl border border-slate-700/60">
@@ -71,10 +63,10 @@ export default function ExpenseTable(props: Props) {
                     <div class="flex items-center gap-2.5">
                       <Avatar name={item().payer} />
                       <input
-                        class={clsx(
-                          "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24",
-                          "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-                        )}
+                        classList={{
+                          "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30": true,
+                          "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24": true,
+                        }}
                         onInput={(e) =>
                           updateItem(i, (exp) => ({
                             ...exp,
@@ -92,10 +84,10 @@ export default function ExpenseTable(props: Props) {
                         <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
                       </span>
                       <input
-                        class={clsx(
-                          "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28",
-                          "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-                        )}
+                        classList={{
+                          "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30": true,
+                          "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28": true,
+                        }}
                         onInput={(e) => {
                           const v = Number.parseFloat(e.currentTarget.value);
                           if (!Number.isNaN(v)) {
@@ -125,10 +117,10 @@ export default function ExpenseTable(props: Props) {
                               />
                             </span>
                             <input
-                              class={clsx(
-                                "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2 py-1 text-slate-200 text-xs placeholder-slate-600 transition-all duration-200 max-sm:max-w-16 sm:w-20",
-                                "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-                              )}
+                              classList={{
+                                "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30": true,
+                                "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2 py-1 text-slate-200 text-xs placeholder-slate-600 transition-all duration-200 max-sm:max-w-16 sm:w-20": true,
+                              }}
                               onInput={(e) => {
                                 const val = e.currentTarget.value;
                                 updateItem(i, (exp) => ({
@@ -147,10 +139,10 @@ export default function ExpenseTable(props: Props) {
                                 <CurrencyEuro class="size-3 translate-y-px text-slate-600" />
                               </span>
                               <input
-                                class={clsx(
-                                  "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1 pr-1.5 pl-6 text-slate-200 text-xs placeholder-slate-600 transition-all duration-200 max-sm:w-14 sm:w-16",
-                                  "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-                                )}
+                                classList={{
+                                  "focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30": true,
+                                  "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1 pr-1.5 pl-6 text-slate-200 text-xs placeholder-slate-600 transition-all duration-200 max-sm:w-14 sm:w-16": true,
+                                }}
                                 onInput={(e) => {
                                   const raw = e.currentTarget.value;
                                   updateItem(i, (exp) => ({

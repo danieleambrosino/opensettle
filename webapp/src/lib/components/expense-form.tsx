@@ -2,14 +2,10 @@ import { createSignal, Index } from "solid-js";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 import Plus from "@/lib/components/icons/plus";
 import Trash from "@/lib/components/icons/trash";
-import type { Participant } from "@/lib/types";
+import type { Expense, Participant } from "@/lib/types";
 
 interface Props {
-  onAddExpense?: (expense: {
-    payer: string;
-    amount: number;
-    participants: Participant[];
-  }) => void;
+  onAddExpense?: (expense: Expense) => void;
 }
 
 interface FieldParticipant {
@@ -22,10 +18,10 @@ export default function ExpenseForm(props: Props) {
   const [newAmount, setNewAmount] = createSignal("");
   const [newParticipants, setNewParticipants] = createSignal<
     FieldParticipant[]
-  >([{ person: "", amount: "" }]);
+  >([{ amount: "", person: "" }]);
 
   function addParticipantField() {
-    setNewParticipants([...newParticipants(), { person: "", amount: "" }]);
+    setNewParticipants([...newParticipants(), { amount: "", person: "" }]);
   }
 
   function removeParticipantField(idx: number) {
@@ -52,22 +48,22 @@ export default function ExpenseForm(props: Props) {
     const participants: Participant[] = newParticipants()
       .filter((p) => p.person.trim())
       .map((p) => ({
-        person: p.person.trim(),
         amount: p.amount.trim()
           ? Math.round(Number.parseFloat(p.amount.trim()) * 100)
           : null,
+        person: p.person.trim(),
       }));
     if (participants.length === 0) {
       return;
     }
     props.onAddExpense?.({
-      payer: newPayer().trim(),
       amount: amountNum,
       participants,
+      payer: newPayer().trim(),
     });
     setNewPayer("");
     setNewAmount("");
-    setNewParticipants([{ person: "", amount: "" }]);
+    setNewParticipants([{ amount: "", person: "" }]);
   }
 
   return (

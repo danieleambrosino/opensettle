@@ -1,27 +1,26 @@
-import { clsx } from "clsx";
 import { Index, type JSX, Show } from "solid-js";
 import Avatar from "@/lib/components/avatar";
+import EmptyState from "@/lib/components/empty-state";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 import Trash from "@/lib/components/icons/trash";
-
-interface Item {
-  amount: number;
-  from: string;
-  to: string;
-}
+import type { Transaction } from "@/lib/types";
 
 interface Props {
   accent?: string;
   children?: JSX.Element;
   emptyMessage?: string;
-  items: Item[];
+  items: Transaction[];
   onfocus?: () => void;
-  onItemsChange: (items: Item[]) => void;
+  onItemsChange: (items: Transaction[]) => void;
   onRemove?: (index: number) => void;
 }
 
 export default function FromToTable(props: Props) {
-  function updateField(i: number, field: keyof Item, value: string | number) {
+  function updateField(
+    i: number,
+    field: keyof Transaction,
+    value: string | number
+  ) {
     props.onItemsChange(
       props.items.map((item, j) =>
         j === i ? { ...item, [field]: value } : item
@@ -63,12 +62,13 @@ export default function FromToTable(props: Props) {
                       <div class="flex items-center gap-2.5">
                         <Avatar name={item().from} />
                         <input
-                          class={clsx(
-                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24",
-                            props.accent === "emerald"
-                              ? "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                              : "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
-                          )}
+                          classList={{
+                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                              props.accent === "emerald",
+                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                              props.accent !== "emerald",
+                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24": true,
+                          }}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateField(i, "from", e.currentTarget.value)
@@ -82,12 +82,13 @@ export default function FromToTable(props: Props) {
                       <div class="flex items-center gap-2.5">
                         <Avatar name={item().to} />
                         <input
-                          class={clsx(
-                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24",
-                            props.accent === "emerald"
-                              ? "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                              : "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
-                          )}
+                          classList={{
+                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                              props.accent === "emerald",
+                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                              props.accent !== "emerald",
+                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24": true,
+                          }}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateField(i, "to", e.currentTarget.value)
@@ -103,12 +104,13 @@ export default function FromToTable(props: Props) {
                           <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
                         </span>
                         <input
-                          class={clsx(
-                            "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28",
-                            props.accent === "emerald"
-                              ? "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                              : "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
-                          )}
+                          classList={{
+                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                              props.accent === "emerald",
+                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                              props.accent !== "emerald",
+                            "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28": true,
+                          }}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateAmount(i, e.currentTarget.value)
@@ -137,14 +139,9 @@ export default function FromToTable(props: Props) {
         </div>
       </Show>
       <Show when={props.items.length === 0 && props.children}>
-        <div class="flex flex-col items-center justify-center py-10 text-center">
-          <div class="mb-3 flex size-14 items-center justify-center rounded-2xl bg-slate-800/60 ring-1 ring-slate-700/50">
-            {props.children}
-          </div>
-          <p class="text-slate-500 text-sm">
-            {props.emptyMessage ?? "No items yet"}
-          </p>
-        </div>
+        <EmptyState message={props.emptyMessage ?? "No items yet"}>
+          {props.children}
+        </EmptyState>
       </Show>
     </>
   );

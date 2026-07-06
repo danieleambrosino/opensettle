@@ -8,21 +8,9 @@ export function computeBalances(obligations: Obligation[]): Balance[] {
   }
   return balancesMap
     .entries()
-    .map(([id, amt]) => ({ person: id, amount: amt }))
+    .map(([id, amt]) => ({ amount: amt, person: id }))
     .toArray()
-    .toSorted((a, b) => {
-      if (a.amount === b.amount) {
-        if (a.person === b.person) {
-          return 0;
-        }
-        if (a.person < b.person) {
-          return -1;
-        }
-        return 1;
-      }
-      if (a.amount < b.amount) {
-        return -1;
-      }
-      return 1;
-    });
+    .toSorted(
+      (a, b) => a.amount - b.amount || a.person.localeCompare(b.person)
+    );
 }

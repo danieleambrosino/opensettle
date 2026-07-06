@@ -42,9 +42,9 @@ function splitExpense(expense: Expense): Obligation[] {
     .entries()
     .filter(([p, s]) => p !== expense.payer && s !== 0)
     .map(([p, s]) => ({
+      amount: s,
       from: p,
       to: expense.payer,
-      amount: s,
     }))
     .toArray();
 }

@@ -61,9 +61,9 @@ export function computeMinimalSettlementSet(balances: Balance[]): Settlement[] {
   const creditors = new MaxHeap();
   for (const b of balances) {
     if (b.amount < 0) {
-      debtors.push({ person: b.person, amount: -b.amount });
+      debtors.push({ amount: -b.amount, person: b.person });
     } else if (b.amount > 0) {
-      creditors.push({ person: b.person, amount: b.amount });
+      creditors.push({ amount: b.amount, person: b.person });
     }
   }
 
@@ -74,7 +74,7 @@ export function computeMinimalSettlementSet(balances: Balance[]): Settlement[] {
     const c = creditors.pop();
 
     const amount = Math.min(d.amount, c.amount);
-    settlements.push({ from: d.person, to: c.person, amount });
+    settlements.push({ amount, from: d.person, to: c.person });
 
     d.amount -= amount;
     c.amount -= amount;

@@ -2,7 +2,7 @@ import DocumentArrowDown from "@/lib/components/icons/document-arrow-down";
 import DocumentArrowUp from "@/lib/components/icons/document-arrow-up";
 import type { Balance, Expense, Obligation, Settlement } from "@/lib/types";
 
-interface ImportData {
+export interface ImportData {
   autoSyncBalances: boolean;
   autoSyncObligations: boolean;
   autoSyncSettlements: boolean;
@@ -14,14 +14,14 @@ interface ImportData {
 }
 
 interface Props {
-  autoSyncBalances?: boolean;
-  autoSyncObligations?: boolean;
-  autoSyncSettlements?: boolean;
-  balances?: Balance[];
-  expenses?: Expense[];
-  obligations?: Obligation[];
+  autoSyncBalances: boolean;
+  autoSyncObligations: boolean;
+  autoSyncSettlements: boolean;
+  balances: Balance[];
+  expenses: Expense[];
+  obligations: Obligation[];
   onImport: (data: ImportData) => void;
-  settlements?: Settlement[];
+  settlements: Settlement[];
 }
 
 export default function DataActions(props: Props) {
@@ -29,13 +29,13 @@ export default function DataActions(props: Props) {
 
   function handleExport() {
     const data: ImportData = {
-      autoSyncBalances: props.autoSyncBalances ?? true,
-      autoSyncObligations: props.autoSyncObligations ?? true,
-      autoSyncSettlements: props.autoSyncSettlements ?? true,
-      balances: props.balances ?? [],
-      expenses: props.expenses ?? [],
-      obligations: props.obligations ?? [],
-      settlements: props.settlements ?? [],
+      autoSyncBalances: props.autoSyncBalances,
+      autoSyncObligations: props.autoSyncObligations,
+      autoSyncSettlements: props.autoSyncSettlements,
+      balances: props.balances,
+      expenses: props.expenses,
+      obligations: props.obligations,
+      settlements: props.settlements,
       version: 1,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], {

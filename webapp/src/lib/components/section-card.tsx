@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { type JSX, Show } from "solid-js";
 
 interface Props {
@@ -17,17 +16,17 @@ export default function SectionCard(props: Props) {
       <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <span
-            class={clsx(
-              "flex size-8 items-center justify-center rounded-lg font-bold text-white text-xs shadow-md",
-              accent === "indigo" &&
-                "bg-linear-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30",
-              accent === "violet" &&
-                "bg-linear-to-br from-violet-500 to-purple-600 shadow-violet-500/30",
-              accent === "amber" &&
-                "bg-linear-to-br from-amber-500 to-orange-600 shadow-amber-500/30",
-              accent === "emerald" &&
-                "bg-linear-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30"
-            )}
+            classList={{
+              "bg-linear-to-br from-amber-500 to-orange-600 shadow-amber-500/30":
+                accent === "amber",
+              "bg-linear-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30":
+                accent === "emerald",
+              "bg-linear-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30":
+                accent === "indigo",
+              "bg-linear-to-br from-violet-500 to-purple-600 shadow-violet-500/30":
+                accent === "violet",
+              "flex size-8 items-center justify-center rounded-lg font-bold text-white text-xs shadow-md": true,
+            }}
           >
             {props.number}
           </span>

@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { For, Show } from "solid-js";
 
 interface Step {
@@ -30,38 +29,38 @@ export default function Hero(props: Props) {
             <div class="flex items-center">
               <div class="flex flex-col items-center gap-1.5">
                 <div
-                  class={clsx(
-                    "flex size-8 items-center justify-center rounded-full font-bold text-xs transition-all duration-300",
-                    step.done &&
-                      "bg-linear-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/30 shadow-lg",
-                    !step.done &&
-                      step.active &&
-                      "border border-slate-600 bg-slate-800/60 text-slate-400",
-                    !(step.done || step.active) &&
-                      "border border-slate-800 bg-slate-900/40 text-slate-700"
-                  )}
+                  classList={{
+                    "bg-linear-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/30 shadow-lg":
+                      step.done,
+                    "border border-slate-600 bg-slate-800/60 text-slate-400":
+                      !step.done && step.active,
+                    "border border-slate-800 bg-slate-900/40 text-slate-700": !(
+                      step.done || step.active
+                    ),
+                    "flex size-8 items-center justify-center rounded-full font-bold text-xs transition-all duration-300": true,
+                  }}
                 >
                   {step.done ? "\u2713" : i() + 1}
                 </div>
                 <span
-                  class={clsx(
-                    "whitespace-nowrap font-medium text-[11px] uppercase tracking-wider",
-                    step.done && "text-emerald-400",
-                    !step.done && step.active && "text-slate-400",
-                    !(step.done || step.active) && "text-slate-700"
-                  )}
+                  classList={{
+                    "text-emerald-400": step.done,
+                    "text-slate-400": !step.done && step.active,
+                    "text-slate-700": !(step.done || step.active),
+                    "whitespace-nowrap font-medium text-[11px] uppercase tracking-wider": true,
+                  }}
                 >
                   {step.label}
                 </span>
               </div>
               <Show when={i() < props.steps.length - 1}>
                 <div
-                  class={clsx(
-                    "mx-2 mb-5 h-px w-12 sm:w-20",
-                    step.done &&
-                      "bg-linear-to-r from-emerald-500/80 to-slate-600",
-                    !step.done && "bg-slate-800"
-                  )}
+                  classList={{
+                    "bg-linear-to-r from-emerald-500/80 to-slate-600":
+                      step.done,
+                    "bg-slate-800": !step.done,
+                    "mx-2 mb-5 h-px w-12 sm:w-20": true,
+                  }}
                 />
               </Show>
             </div>

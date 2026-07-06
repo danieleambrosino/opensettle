@@ -1,7 +1,9 @@
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createEffect, createMemo } from "solid-js";
+import { createStore } from "solid-js/store";
 import { computeBalances } from "@/lib/balance";
 import AutoSync from "@/lib/components/auto-sync";
 import BalanceTable from "@/lib/components/balance-table";
+import type { ImportData } from "@/lib/components/data-actions";
 import DataActions from "@/lib/components/data-actions";
 import ExpenseForm from "@/lib/components/expense-form";
 import ExpenseTable from "@/lib/components/expense-table";
@@ -14,122 +16,119 @@ import SectionCard from "@/lib/components/section-card";
 import { computeMinimalSettlementSet } from "@/lib/settlement";
 import { splitExpenses } from "@/lib/split";
 import { loadExpenses, saveExpenses } from "@/lib/storage";
-import type { Balance, Expense, Obligation, Settlement } from "@/lib/types";
+import type { Balance, Expense, Settlement, Transaction } from "@/lib/types";
 
-type StepId = "expenses" | "obligations" | "balances" | "settlements";
+interface AppState {
+  autoSyncBalances: boolean;
+  autoSyncObligations: boolean;
+  autoSyncSettlements: boolean;
+  balances: Balance[];
+  expenses: Expense[];
+  obligations: Transaction[];
+  settlements: Settlement[];
+}
 
 export default function App() {
-  const [expenses, setExpenses] = createSignal<Expense[]>(loadExpenses() ?? []);
-  const [obligations, setObligations] = createSignal<Obligation[]>([]);
-  const [balances, setBalances] = createSignal<Balance[]>([]);
-  const [settlements, setSettlements] = createSignal<Settlement[]>([]);
-
-  const [autoSyncObligations, setAutoSyncObligations] = createSignal(true);
-  const [autoSyncBalances, setAutoSyncBalances] = createSignal(true);
-  const [autoSyncSettlements, setAutoSyncSettlements] = createSignal(true);
+  const [state, setState] = createStore<AppState>({
+    autoSyncBalances: true,
+    autoSyncObligations: true,
+    autoSyncSettlements: true,
+    balances: [],
+    expenses: loadExpenses() ?? [],
+    obligations: [],
+    settlements: [],
+  });
 
   const computedObligations = createMemo(() =>
-    expenses().length > 0 ? splitExpenses(expenses()) : []
+    state.expenses.length > 0 ? splitExpenses(state.expenses) : []
   );
   const computedBalances = createMemo(() =>
-    obligations().length > 0 ? computeBalances(obligations()) : []
+    state.obligations.length > 0 ? computeBalances(state.obligations) : []
   );
   const computedSettlements = createMemo(() =>
-    balances().length > 0 ? computeMinimalSettlementSet(balances()) : []
+    state.balances.length > 0 ? computeMinimalSettlementSet(state.balances) : []
   );
 
   createEffect(() => {
-    if (autoSyncObligations()) {
-      setObligations(computedObligations());
+    if (state.autoSyncObligations) {
+      setState("obligations", computedObligations());
     }
   });
   createEffect(() => {
-    if (autoSyncBalances()) {
-      setBalances(computedBalances());
+    if (state.autoSyncBalances) {
+      setState("balances", computedBalances());
     }
   });
   createEffect(() => {
-    if (autoSyncSettlements()) {
-      setSettlements(computedSettlements());
+    if (state.autoSyncSettlements) {
+      setState("settlements", computedSettlements());
     }
   });
 
-  function manualEditObligations() {
-    setAutoSyncObligations(false);
-  }
-  function manualEditBalances() {
-    setAutoSyncBalances(false);
-  }
-  function manualEditSettlements() {
-    setAutoSyncSettlements(false);
-  }
-
   createEffect(() => {
-    saveExpenses(expenses());
+    saveExpenses(state.expenses);
   });
 
-  const steps = createMemo(() => [
-    {
-      id: "expenses" satisfies StepId,
-      label: "Expenses",
-      done: expenses().length > 0,
-      active: true,
-    },
-    {
-      id: "obligations" satisfies StepId,
-      label: "Obligations",
-      done: obligations().length > 0,
-      active: expenses().length > 0,
-    },
-    {
-      id: "balances" satisfies StepId,
-      label: "Balances",
-      done: balances().length > 0,
-      active: obligations().length > 0,
-    },
-    {
-      id: "settlements" satisfies StepId,
-      label: "Settlements",
-      done: settlements().length > 0,
-      active: balances().length > 0,
-    },
-  ]);
-
-  function addExpense(e: {
-    payer: string;
-    amount: number;
-    participants: Participant[];
-  }) {
-    setExpenses([
-      ...expenses(),
+  function createSteps(
+    expenseList: Expense[],
+    obligationList: Transaction[],
+    balanceList: Balance[],
+    settlementList: Settlement[]
+  ) {
+    return [
       {
-        payer: e.payer,
-        amount: e.amount,
-        participants: e.participants,
+        active: true,
+        done: expenseList.length > 0,
+        id: "expenses" as const,
+        label: "Expenses",
       },
-    ]);
+      {
+        active: expenseList.length > 0,
+        done: obligationList.length > 0,
+        id: "obligations" as const,
+        label: "Obligations",
+      },
+      {
+        active: obligationList.length > 0,
+        done: balanceList.length > 0,
+        id: "balances" as const,
+        label: "Balances",
+      },
+      {
+        active: balanceList.length > 0,
+        done: settlementList.length > 0,
+        id: "settlements" as const,
+        label: "Settlements",
+      },
+    ];
+  }
+
+  const steps = () =>
+    createSteps(
+      state.expenses,
+      state.obligations,
+      state.balances,
+      state.settlements
+    );
+
+  function addExpense(e: Expense) {
+    setState("expenses", (prev) => [...prev, e]);
   }
 
   function removeExpense(idx: number) {
-    setExpenses(expenses().filter((_, i) => i !== idx));
+    setState("expenses", (prev) => prev.filter((_, i) => i !== idx));
   }
 
-  function handleImport(data: {
-    expenses: Expense[];
-    obligations: Obligation[];
-    balances: Balance[];
-    settlements: Settlement[];
-    autoSyncObligations: boolean;
-    autoSyncBalances: boolean;
-    autoSyncSettlements: boolean;
-  }) {
-    setExpenses(data.expenses);
-    setObligations(data.obligations);
-    setBalances(data.balances);
-    setSettlements(data.settlements);
-    setAutoSyncObligations(data.autoSyncObligations);
-    setAutoSyncBalances(data.autoSyncBalances);
-    setAutoSyncSettlements(data.autoSyncSettlements);
+  function handleImport(data: ImportData) {
+    setState({
+      autoSyncBalances: data.autoSyncBalances,
+      autoSyncObligations: data.autoSyncObligations,
+      autoSyncSettlements: data.autoSyncSettlements,
+      balances: data.balances,
+      expenses: data.expenses,
+      obligations: data.obligations,
+      settlements: data.settlements,
+    });
   }
 
   return (
@@ -138,14 +137,14 @@ export default function App() {
 
       <div class="mx-auto flex max-w-6xl justify-end px-4 pb-4">
         <DataActions
-          autoSyncBalances={autoSyncBalances()}
-          autoSyncObligations={autoSyncObligations()}
-          autoSyncSettlements={autoSyncSettlements()}
-          balances={balances()}
-          expenses={expenses()}
-          obligations={obligations()}
+          autoSyncBalances={state.autoSyncBalances}
+          autoSyncObligations={state.autoSyncObligations}
+          autoSyncSettlements={state.autoSyncSettlements}
+          balances={state.balances}
+          expenses={state.expenses}
+          obligations={state.obligations}
           onImport={handleImport}
-          settlements={settlements()}
+          settlements={state.settlements}
         />
       </div>
 
@@ -153,8 +152,8 @@ export default function App() {
         <SectionCard accent="indigo" number={1} title="Expenses">
           <ExpenseForm onAddExpense={addExpense} />
           <ExpenseTable
-            items={expenses()}
-            onItemsChange={setExpenses}
+            items={state.expenses}
+            onItemsChange={(items: Expense[]) => setState("expenses", items)}
             onRemove={removeExpense}
           />
         </SectionCard>
@@ -164,8 +163,8 @@ export default function App() {
           actions={
             <AutoSync
               accent="violet"
-              autoSync={autoSyncObligations()}
-              onsync={() => setAutoSyncObligations(true)}
+              autoSync={state.autoSyncObligations}
+              onsync={() => setState("autoSyncObligations", true)}
             />
           }
           number={2}
@@ -174,12 +173,14 @@ export default function App() {
           <FromToTable
             accent="violet"
             emptyMessage="Obligations appear automatically when expenses are added"
-            items={obligations()}
-            onfocus={manualEditObligations}
-            onItemsChange={setObligations}
+            items={state.obligations}
+            onfocus={() => setState("autoSyncObligations", false)}
+            onItemsChange={(items: Transaction[]) =>
+              setState("obligations", items)
+            }
             onRemove={(i) => {
-              setObligations(obligations().filter((_, j) => j !== i));
-              manualEditObligations();
+              setState("obligations", (prev) => prev.filter((_, j) => j !== i));
+              setState("autoSyncObligations", false);
             }}
           >
             <Document class="size-7 text-slate-600" />
@@ -191,8 +192,8 @@ export default function App() {
           actions={
             <AutoSync
               accent="amber"
-              autoSync={autoSyncBalances()}
-              onsync={() => setAutoSyncBalances(true)}
+              autoSync={state.autoSyncBalances}
+              onsync={() => setState("autoSyncBalances", true)}
             />
           }
           number={3}
@@ -200,12 +201,12 @@ export default function App() {
         >
           <BalanceTable
             emptyMessage="Balances appear automatically when obligations are available"
-            items={balances()}
-            onfocus={manualEditBalances}
-            onItemsChange={setBalances}
+            items={state.balances}
+            onfocus={() => setState("autoSyncBalances", false)}
+            onItemsChange={(items: Balance[]) => setState("balances", items)}
             onRemove={(i) => {
-              setBalances(balances().filter((_, j) => j !== i));
-              manualEditBalances();
+              setState("balances", (prev) => prev.filter((_, j) => j !== i));
+              setState("autoSyncBalances", false);
             }}
           >
             <CurrencyEuro class="size-7 text-slate-600" />
@@ -217,8 +218,8 @@ export default function App() {
           actions={
             <AutoSync
               accent="emerald"
-              autoSync={autoSyncSettlements()}
-              onsync={() => setAutoSyncSettlements(true)}
+              autoSync={state.autoSyncSettlements}
+              onsync={() => setState("autoSyncSettlements", true)}
             />
           }
           number={4}
@@ -227,12 +228,14 @@ export default function App() {
           <FromToTable
             accent="emerald"
             emptyMessage="Settlements appear automatically when balances are available"
-            items={settlements()}
-            onfocus={manualEditSettlements}
-            onItemsChange={setSettlements}
+            items={state.settlements}
+            onfocus={() => setState("autoSyncSettlements", false)}
+            onItemsChange={(items: Transaction[]) =>
+              setState("settlements", items)
+            }
             onRemove={(i) => {
-              setSettlements(settlements().filter((_, j) => j !== i));
-              manualEditSettlements();
+              setState("settlements", (prev) => prev.filter((_, j) => j !== i));
+              setState("autoSyncSettlements", false);
             }}
           >
             <CheckCircle class="size-7 text-slate-600" />

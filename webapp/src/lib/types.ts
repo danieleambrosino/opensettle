@@ -2,7 +2,7 @@ export type PersonID = string;
 export type UnsignedCents = number;
 export type Cents = number;
 
-interface Transaction {
+export interface Transaction {
   amount: UnsignedCents;
   from: PersonID;
   to: PersonID;
@@ -16,7 +16,7 @@ export interface Balance {
   person: PersonID;
 }
 
-interface Participant {
+export interface Participant {
   amount: UnsignedCents | null;
   person: PersonID;
 }

@@ -18,8 +18,8 @@ export function personColor(name: string): string {
 }
 
 const eur = new Intl.NumberFormat("en-US", {
-  style: "currency",
   currency: "EUR",
+  style: "currency",
 });
 
 export function fmt(cents: number): string {
