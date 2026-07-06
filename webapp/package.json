@@ -1,29 +1,32 @@
 {
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
-    "@sveltejs/adapter-static": "^3.0.10",
-    "@sveltejs/kit": "^2.63.0",
-    "@sveltejs/vite-plugin-svelte": "^7.1.2",
-    "@tailwindcss/vite": "^4.3.0",
-    "svelte": "^5.56.1",
-    "svelte-check": "^4.6.0",
-    "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3",
-    "ultracite": "^7.8.3",
-    "vite": "^8.0.16"
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "solid-js": "^1.9.9"
   },
-  "name": "frontend",
+  "devDependencies": {
+    "@biomejs/biome": "2.5.2",
+    "@tailwindcss/vite": "^4.1.13",
+    "solid-devtools": "^0.34.3",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^6.0.3",
+    "ultracite": "7.9.2",
+    "vite": "^8.1.3",
+    "vite-plugin-solid": "^2.11.8"
+  },
+  "name": "vite-template-solid",
   "scripts": {
-    "dev": "vite dev",
+    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "prepare": "svelte-kit sync || echo ''",
+    "serve": "vite preview",
     "check": "ultracite check",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "ultracite:check": "ultracite check",
     "fix": "ultracite fix"
   },
   "type": "module",
-  "version": "0.0.1",
-  "private": true
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
 }

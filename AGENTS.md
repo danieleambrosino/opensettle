@@ -25,19 +25,17 @@ Here only what an AI agent needs to write code.
 | `cli/cmd/opensettle/main.go` | Single binary (subcommands: split, minimize) |
 | `cli/Makefile` | Build target |
 
-## Webapp (SvelteKit)
+## Webapp (Solid)
 
 | Path | Content |
 |------|---------|
-| `webapp/src/lib/types.d.ts` | TypeScript type definitions |
+| `webapp/src/lib/types.ts` | TypeScript type definitions |
 | `webapp/src/lib/split.ts` | SplitExpenses algorithm |
 | `webapp/src/lib/balance.ts` | ComputeBalances algorithm |
 | `webapp/src/lib/settlement.ts` | ComputeMinimalSettlementSet algorithm |
 | `webapp/src/lib/storage.ts` | localStorage persistence |
 | `webapp/src/lib/utils.ts` | Utility helpers |
-| `webapp/src/lib/components/` | Svelte components |
-| `webapp/src/lib/assets/` | Static assets |
-| `webapp/src/routes/+page.svelte` | Main page |
-| `webapp/src/routes/+layout.svelte` | Root layout |
-| `webapp/src/routes/+layout.ts` | Layout load function |
-| `webapp/src/routes/layout.css` | Global styles |
+| `webapp/src/lib/components/` | Solid components |
+| `webapp/src/app.tsx` | Main page (orchestrator + UI) |
+| `webapp/src/index.tsx` | Entry point |
+| `webapp/src/index.css` | Global styles |

@@ -60,11 +60,11 @@ results if someone's share doesn't feel right.
 
 So I built a CLI. Then I thought: why not a GUI too? Having a visual
 version of the same pipeline felt like a good excuse to build something
-with SvelteKit. The algorithm ended up implemented twice — Go for the CLI,
+with Solid. The algorithm ended up implemented twice — Go for the CLI,
 TypeScript for the webapp. Who cares. It's a side project, and writing
 the same thing in two languages was half the fun 🙂
 
-All algorithms are hand-written. The webapp UI — the Svelte components,
+All algorithms are hand-written. The webapp UI — the Solid components,
 layout, and styling — was built with some help from DeepSeek V4 Flash.
 Consider it my pair programmer for the frontend bits 🙂
 
@@ -112,7 +112,7 @@ distributed one by one. The payer is skipped.
 
 ## Web app
 
-A self-contained SvelteKit frontend. Same pipeline, but visual and
+A self-contained Solid frontend. Same pipeline, but visual and
 interactive. Runs entirely in the browser.
 
 **Live demo:** [danieleambrosino.github.io/opensettle](https://danieleambrosino.github.io/opensettle)
