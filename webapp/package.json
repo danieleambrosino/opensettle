@@ -5,7 +5,6 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.2",
     "@tailwindcss/vite": "^4.1.13",
-    "solid-devtools": "^0.34.3",
     "tailwindcss": "^4.1.13",
     "typescript": "^6.0.3",
     "ultracite": "7.9.2",
