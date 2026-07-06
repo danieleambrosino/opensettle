@@ -66,8 +66,8 @@ export default function DataActions(props: Props) {
           throw new Error("unsupported file version");
         }
         props.onImport(data);
-      } catch (err) {
-        console.error(`Import failed: ${(err as Error).message}`);
+      } catch {
+        // invalid file — ignore silently
       }
     };
     reader.readAsText(file);

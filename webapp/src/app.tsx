@@ -53,13 +53,9 @@ export default function App() {
     if (state.autoSyncObligations) {
       setState("obligations", computedObligations());
     }
-  });
-  createEffect(() => {
     if (state.autoSyncBalances) {
       setState("balances", computedBalances());
     }
-  });
-  createEffect(() => {
     if (state.autoSyncSettlements) {
       setState("settlements", computedSettlements());
     }
@@ -68,40 +64,6 @@ export default function App() {
   createEffect(() => {
     saveExpenses(state.expenses);
   });
-
-  function createSteps(
-    expenseList: Expense[],
-    obligationList: Transaction[],
-    balanceList: Balance[],
-    settlementList: Settlement[]
-  ) {
-    return [
-      {
-        active: true,
-        done: expenseList.length > 0,
-        id: "expenses" as const,
-        label: "Expenses",
-      },
-      {
-        active: expenseList.length > 0,
-        done: obligationList.length > 0,
-        id: "obligations" as const,
-        label: "Obligations",
-      },
-      {
-        active: obligationList.length > 0,
-        done: balanceList.length > 0,
-        id: "balances" as const,
-        label: "Balances",
-      },
-      {
-        active: balanceList.length > 0,
-        done: settlementList.length > 0,
-        id: "settlements" as const,
-        label: "Settlements",
-      },
-    ];
-  }
 
   const steps = () =>
     createSteps(
@@ -244,4 +206,38 @@ export default function App() {
       </div>
     </div>
   );
+}
+
+function createSteps(
+  expenseList: Expense[],
+  obligationList: Transaction[],
+  balanceList: Balance[],
+  settlementList: Settlement[]
+) {
+  return [
+    {
+      active: true,
+      done: expenseList.length > 0,
+      id: "expenses" as const,
+      label: "Expenses",
+    },
+    {
+      active: expenseList.length > 0,
+      done: obligationList.length > 0,
+      id: "obligations" as const,
+      label: "Obligations",
+    },
+    {
+      active: obligationList.length > 0,
+      done: balanceList.length > 0,
+      id: "balances" as const,
+      label: "Balances",
+    },
+    {
+      active: balanceList.length > 0,
+      done: settlementList.length > 0,
+      id: "settlements" as const,
+      label: "Settlements",
+    },
+  ];
 }
