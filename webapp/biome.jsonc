@@ -1,4 +1,28 @@
 {
   "extends": ["ultracite/biome/core", "ultracite/biome/solid"],
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json"
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "linter": {
+    "rules": {
+      "performance": {
+        "noJsxPropsBind": "off"
+      },
+      "suspicious": {
+        "noUnknownAttribute": {
+          "level": "error",
+          "options": {
+            "ignore": [
+              "class",
+              "classList",
+              "for",
+              "stroke-linecap",
+              "stroke-linejoin",
+              "stroke-width",
+              "clip-rule",
+              "fill-rule"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

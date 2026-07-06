@@ -32,7 +32,7 @@ function splitExpense(expense: Expense): Obligation[] {
       let extra = 0;
       if (rem > 0) {
         extra = 1;
-        rem--;
+        rem -= 1;
       }
       shares.set(p, eq + extra);
     }

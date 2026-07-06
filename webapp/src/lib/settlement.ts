@@ -13,7 +13,7 @@ class MaxHeap {
   }
 
   pop(): Balance {
-    const top = this.data[0];
+    const [top] = this.data;
     const last = this.data.pop() as Balance;
     if (this.data.length > 0) {
       this.data[0] = last;
@@ -37,6 +37,7 @@ class MaxHeap {
   private _siftDown(idx: number): void {
     const n = this.data.length;
     let i = idx;
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: intentional, uses break inside
     while (true) {
       let largest = i;
       const left = i * 2 + 1;
