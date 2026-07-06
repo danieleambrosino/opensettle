@@ -38,7 +38,7 @@
 </script>
 
 {#if items.length > 0}
-  <div class="overflow-hidden rounded-xl border border-slate-700/60">
+  <div class="overflow-x-auto rounded-xl border border-slate-700/60">
     <table class="w-full">
       <thead>
         <tr class="border-b border-slate-700/60 bg-slate-800/60">
@@ -62,7 +62,7 @@
       </thead>
       <tbody class="divide-y divide-slate-800">
         {#each items as _, i}
-          <tr class="transition-colors duration-150 hover:bg-slate-800/40">
+          <tr class="transition-colors duration-150">
             <td class="px-4 py-3">
               <div class="flex items-center gap-2.5">
                 <Avatar name={items[i].from} />
@@ -70,7 +70,7 @@
                   type="text"
                   bind:value={items[i].from}
                   {onfocus}
-                  class="w-24 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 {focusRing}"
+                  class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 max-sm:max-w-20 sm:w-24 {focusRing}"
                 >
               </div>
             </td>
@@ -81,7 +81,7 @@
                   type="text"
                   bind:value={items[i].to}
                   {onfocus}
-                  class="w-24 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 {focusRing}"
+                  class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 max-sm:max-w-20 sm:w-24 {focusRing}"
                 >
               </div>
             </td>
@@ -103,7 +103,7 @@
                       if (!Number.isNaN(v)) { items[i].amount = Math.round(v * 100); }
                     }}
                   {onfocus}
-                  class="w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 {focusRing}"
+                  class="min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 max-sm:w-24 sm:w-28 {focusRing}"
                 >
               </div>
             </td>
@@ -112,7 +112,7 @@
                 type="button"
                 onclick={() => onremove?.(i)}
                 aria-label="Remove row"
-                class="rounded-lg p-1.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"
+                class="rounded-lg p-2.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400 active:bg-red-500/25"
               >
                 <Trash />
               </button>
@@ -132,3 +132,11 @@
     <p class="text-sm text-slate-500">{emptyMessage}</p>
   </div>
 {/if}
+
+<style>
+  @media (hover: hover) {
+    tbody tr:hover {
+      background-color: rgba(30, 41, 59, 0.4);
+    }
+  }
+</style>

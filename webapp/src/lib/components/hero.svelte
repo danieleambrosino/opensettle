@@ -18,7 +18,9 @@
     </p>
   </div>
 
-  <div class="mt-8 flex items-center justify-center gap-0">
+  <div
+    class="mt-8 flex items-center justify-start gap-0 overflow-x-auto px-2 sm:justify-center sm:overflow-visible sm:px-0"
+  >
     {#each steps as step, i}
       <div class="flex items-center">
         <div class="flex flex-col items-center gap-1.5">
@@ -34,7 +36,7 @@
           </div>
           <span
             class={[
-              "whitespace-nowrap text-[10px] font-medium uppercase tracking-wider",
+              "whitespace-nowrap text-[11px] font-medium uppercase tracking-wider",
               step.done && "text-emerald-400",
               !step.done && step.active && "text-slate-400",
               !(step.done || step.active) && "text-slate-700",

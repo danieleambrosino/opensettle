@@ -93,7 +93,7 @@
   <button
     type="button"
     onclick={() => fileInput?.click()}
-    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
+    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300 active:scale-[0.97] active:border-slate-500 active:bg-slate-700/60"
   >
     <DocumentArrowDownIcon class="size-5" />
     Import
@@ -101,7 +101,7 @@
   <button
     type="button"
     onclick={handleExport}
-    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300"
+    class="inline-flex items-center gap-2 rounded-lg border border-slate-700/60 bg-slate-800/40 px-4 py-2 text-sm font-medium text-slate-400 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700/40 hover:text-slate-300 active:scale-[0.97] active:border-slate-500 active:bg-slate-700/60"
   >
     <DocumentArrowUpIcon class="size-5" />
     Export

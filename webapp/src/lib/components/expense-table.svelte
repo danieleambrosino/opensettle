@@ -42,7 +42,7 @@
 </script>
 
 {#if items.length > 0}
-  <div class="overflow-hidden rounded-xl border border-slate-700/60">
+  <div class="overflow-x-auto rounded-xl border border-slate-700/60">
     <table class="w-full">
       <thead>
         <tr class="border-b border-slate-700/60 bg-slate-800/60">
@@ -68,7 +68,7 @@
       </thead>
       <tbody class="divide-y divide-slate-800">
         {#each items as _, i}
-          <tr class="transition-colors duration-150 hover:bg-slate-800/40">
+          <tr class="transition-colors duration-150">
             <td class="px-4 py-3">
               <div class="flex items-center gap-2.5">
                 <Avatar name={items[i].payer} />
@@ -76,7 +76,7 @@
                   type="text"
                   bind:value={items[i].payer}
                   {onfocus}
-                  class="w-24 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 {focusRing}"
+                  class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-sm text-slate-200 transition-all duration-200 max-sm:max-w-20 sm:w-24 {focusRing}"
                 >
               </div>
             </td>
@@ -98,7 +98,7 @@
                       if (!Number.isNaN(v)) { items[i].amount = Math.round(v * 100); }
                     }}
                   {onfocus}
-                  class="w-28 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 {focusRing}"
+                  class="min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pl-8 pr-2.5 text-sm font-medium text-slate-200 transition-all duration-200 max-sm:w-24 sm:w-28 {focusRing}"
                 >
               </div>
             </td>
@@ -119,7 +119,7 @@
                       placeholder="Name"
                       bind:value={items[i].participants[j].person}
                       {onfocus}
-                      class="w-20 rounded-lg border border-slate-700 bg-slate-800/60 px-2 py-1 text-xs text-slate-200 placeholder-slate-600 transition-all duration-200 {focusRing}"
+                      class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2 py-1 text-xs text-slate-200 placeholder-slate-600 transition-all duration-200 max-sm:max-w-16 sm:w-20 {focusRing}"
                     >
                     <div class="relative">
                       <span
@@ -149,14 +149,14 @@
                           }
                         }}
                         {onfocus}
-                        class="w-16 rounded-lg border border-slate-700 bg-slate-800/60 py-1 pl-6 pr-1.5 text-xs text-slate-200 placeholder-slate-600 transition-all duration-200 {focusRing}"
+                        class="min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1 pl-6 pr-1.5 text-xs text-slate-200 placeholder-slate-600 transition-all duration-200 max-sm:w-14 sm:w-16 {focusRing}"
                       >
                     </div>
                     <button
                       type="button"
                       onclick={() => removeParticipant(i, j)}
                       aria-label="Remove participant"
-                      class="flex size-5 shrink-0 items-center justify-center rounded text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"
+                      class="flex size-7 shrink-0 items-center justify-center rounded text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400 active:bg-red-500/25"
                     >
                       <Trash />
                     </button>
@@ -165,7 +165,7 @@
                 <button
                   type="button"
                   onclick={() => addParticipant(i)}
-                  class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-400 transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-300"
+                  class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-400 transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-300 active:bg-indigo-500/20"
                 >
                   <Plus />
                   Add participant
@@ -177,7 +177,7 @@
                 type="button"
                 onclick={() => onremove?.(i)}
                 aria-label="Remove expense"
-                class="rounded-lg p-1.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400"
+                class="rounded-lg p-2.5 text-slate-600 transition-all duration-200 hover:bg-red-500/15 hover:text-red-400 active:bg-red-500/25"
               >
                 <Trash />
               </button>
@@ -190,3 +190,11 @@
 {:else}
   <EmptyState message="No expenses yet — add one above" />
 {/if}
+
+<style>
+  @media (hover: hover) {
+    tbody tr:hover {
+      background-color: rgba(30, 41, 59, 0.4);
+    }
+  }
+</style>
