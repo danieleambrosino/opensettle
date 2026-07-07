@@ -82,15 +82,7 @@ export default function App() {
   }
 
   function handleImport(data: ImportData) {
-    setState({
-      autoSyncBalances: data.autoSyncBalances,
-      autoSyncObligations: data.autoSyncObligations,
-      autoSyncSettlements: data.autoSyncSettlements,
-      balances: data.balances,
-      expenses: data.expenses,
-      obligations: data.obligations,
-      settlements: data.settlements,
-    });
+    setState({ ...data });
   }
 
   return (
@@ -98,16 +90,7 @@ export default function App() {
       <Hero steps={steps()} />
 
       <div class="mx-auto flex max-w-6xl justify-end px-4 pb-4">
-        <DataActions
-          autoSyncBalances={state.autoSyncBalances}
-          autoSyncObligations={state.autoSyncObligations}
-          autoSyncSettlements={state.autoSyncSettlements}
-          balances={state.balances}
-          expenses={state.expenses}
-          obligations={state.obligations}
-          onImport={handleImport}
-          settlements={state.settlements}
-        />
+        <DataActions {...state} onImport={handleImport} />
       </div>
 
       <div class="mx-auto max-w-6xl space-y-6 px-4 pb-16">
@@ -209,33 +192,33 @@ export default function App() {
 }
 
 function createSteps(
-  expenseList: Expense[],
-  obligationList: Transaction[],
-  balanceList: Balance[],
-  settlementList: Settlement[]
+  expenses: Expense[],
+  obligations: Transaction[],
+  balances: Balance[],
+  settlements: Settlement[]
 ) {
   return [
     {
       active: true,
-      done: expenseList.length > 0,
+      done: expenses.length > 0,
       id: "expenses" as const,
       label: "Expenses",
     },
     {
-      active: expenseList.length > 0,
-      done: obligationList.length > 0,
+      active: expenses.length > 0,
+      done: obligations.length > 0,
       id: "obligations" as const,
       label: "Obligations",
     },
     {
-      active: obligationList.length > 0,
-      done: balanceList.length > 0,
+      active: obligations.length > 0,
+      done: balances.length > 0,
       id: "balances" as const,
       label: "Balances",
     },
     {
-      active: balanceList.length > 0,
-      done: settlementList.length > 0,
+      active: balances.length > 0,
+      done: settlements.length > 0,
       id: "settlements" as const,
       label: "Settlements",
     },
