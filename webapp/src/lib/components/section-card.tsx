@@ -1,9 +1,9 @@
-import { type JSX, Show } from "solid-js";
+import { type Element, Show } from "solid-js";
 
 interface Props {
   accent?: string;
-  actions?: JSX.Element;
-  children?: JSX.Element;
+  actions?: Element;
+  children?: Element;
   number: number;
   title: string;
 }
@@ -16,17 +16,19 @@ export default function SectionCard(props: Props) {
       <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <span
-            classList={{
-              "bg-linear-to-br from-amber-500 to-orange-600 shadow-amber-500/30":
-                accent === "amber",
-              "bg-linear-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30":
-                accent === "emerald",
-              "bg-linear-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30":
-                accent === "indigo",
-              "bg-linear-to-br from-violet-500 to-purple-600 shadow-violet-500/30":
-                accent === "violet",
-              "flex size-8 items-center justify-center rounded-lg font-bold text-white text-xs shadow-md": true,
-            }}
+            class={[
+              "flex size-8 items-center justify-center rounded-lg font-bold text-white text-xs shadow-md",
+              {
+                "bg-linear-to-br from-amber-500 to-orange-600 shadow-amber-500/30":
+                  accent === "amber",
+                "bg-linear-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30":
+                  accent === "emerald",
+                "bg-linear-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30":
+                  accent === "indigo",
+                "bg-linear-to-br from-violet-500 to-purple-600 shadow-violet-500/30":
+                  accent === "violet",
+              },
+            ]}
           >
             {props.number}
           </span>

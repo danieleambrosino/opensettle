@@ -1,4 +1,4 @@
-import { Index, type JSX, Show } from "solid-js";
+import { type Element, For, Show } from "solid-js";
 import Avatar from "@/lib/components/avatar";
 import EmptyState from "@/lib/components/empty-state";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
@@ -6,7 +6,7 @@ import Trash from "@/lib/components/icons/trash";
 import type { Balance } from "@/lib/types";
 
 interface Props {
-  children?: JSX.Element;
+  children?: Element;
   emptyMessage?: string;
   items: Balance[];
   onfocus?: () => void;
@@ -61,7 +61,7 @@ export default function BalanceTable(props: Props) {
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800">
-              <Index each={props.items}>
+              <For each={props.items} keyed={false}>
                 {(item, i) => (
                   <tr class="transition-colors duration-150 hover:bg-slate-800/40">
                     <td class="px-4 py-3.5">
@@ -85,12 +85,14 @@ export default function BalanceTable(props: Props) {
                             <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
                           </span>
                           <input
-                            classList={{
-                              "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium font-mono text-sm transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 max-sm:w-24 sm:w-28": true,
-                              "text-emerald-400": item().amount > 0,
-                              "text-red-400": item().amount < 0,
-                              "text-slate-400": item().amount === 0,
-                            }}
+                            class={[
+                              "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium font-mono text-sm transition-all duration-200 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 max-sm:w-24 sm:w-28",
+                              {
+                                "text-emerald-400": item().amount > 0,
+                                "text-red-400": item().amount < 0,
+                                "text-slate-400": item().amount === 0,
+                              },
+                            ]}
                             onFocus={props.onfocus}
                             onInput={(e) =>
                               updateAmount(i, e.currentTarget.value)
@@ -101,12 +103,14 @@ export default function BalanceTable(props: Props) {
                           />
                         </div>
                         <span
-                          classList={{
-                            "font-medium text-xs": true,
-                            "text-emerald-400": item().amount > 0,
-                            "text-red-400": item().amount < 0,
-                            "text-slate-500": item().amount === 0,
-                          }}
+                          class={[
+                            "font-medium text-xs",
+                            {
+                              "text-emerald-400": item().amount > 0,
+                              "text-red-400": item().amount < 0,
+                              "text-slate-500": item().amount === 0,
+                            },
+                          ]}
                         >
                           {statusLabel(item().amount)}
                         </span>
@@ -124,7 +128,7 @@ export default function BalanceTable(props: Props) {
                     </td>
                   </tr>
                 )}
-              </Index>
+              </For>
             </tbody>
           </table>
         </div>

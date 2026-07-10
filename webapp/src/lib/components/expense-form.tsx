@@ -1,4 +1,4 @@
-import { createSignal, Index } from "solid-js";
+import { createSignal, For } from "solid-js";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 import Plus from "@/lib/components/icons/plus";
 import Trash from "@/lib/components/icons/trash";
@@ -112,7 +112,7 @@ export default function ExpenseForm(props: Props) {
         Participants
       </span>
       <div class="space-y-2">
-        <Index each={newParticipants()}>
+        <For each={newParticipants()} keyed={false}>
           {(item, i) => (
             <div class="flex items-center gap-2">
               <input
@@ -149,7 +149,7 @@ export default function ExpenseForm(props: Props) {
               </button>
             </div>
           )}
-        </Index>
+        </For>
         <button
           class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium text-indigo-400 text-xs transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-300"
           onClick={addParticipantField}

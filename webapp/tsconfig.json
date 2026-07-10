@@ -2,7 +2,7 @@
   "compilerOptions": {
     // General
     "jsx": "preserve",
-    "jsxImportSource": "solid-js",
+    "jsxImportSource": "@solidjs/web",
     "target": "ESNext",
 
     // Modules
@@ -14,9 +14,9 @@
     "noEmit": true,
 
     // Path alias
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "*": ["./*"]
     },
 
     // Type Checking & Safety

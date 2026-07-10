@@ -1,4 +1,4 @@
-import { Index, type JSX, Show } from "solid-js";
+import { type Element, For, Show } from "solid-js";
 import Avatar from "@/lib/components/avatar";
 import EmptyState from "@/lib/components/empty-state";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
@@ -7,7 +7,7 @@ import type { Transaction } from "@/lib/types";
 
 interface Props {
   accent?: string;
-  children?: JSX.Element;
+  children?: Element;
   emptyMessage?: string;
   items: Transaction[];
   onfocus?: () => void;
@@ -55,20 +55,22 @@ export default function FromToTable(props: Props) {
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800">
-              <Index each={props.items}>
+              <For each={props.items} keyed={false}>
                 {(item, i) => (
                   <tr class="transition-colors duration-150 hover:bg-slate-800/40">
                     <td class="px-4 py-3">
                       <div class="flex items-center gap-2.5">
                         <Avatar name={item().from} />
                         <input
-                          classList={{
-                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
-                              props.accent === "emerald",
-                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
-                              props.accent !== "emerald",
-                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24": true,
-                          }}
+                          class={[
+                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24",
+                            {
+                              "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                                props.accent === "emerald",
+                              "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                                props.accent !== "emerald",
+                            },
+                          ]}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateField(i, "from", e.currentTarget.value)
@@ -82,13 +84,15 @@ export default function FromToTable(props: Props) {
                       <div class="flex items-center gap-2.5">
                         <Avatar name={item().to} />
                         <input
-                          classList={{
-                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
-                              props.accent === "emerald",
-                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
-                              props.accent !== "emerald",
-                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24": true,
-                          }}
+                          class={[
+                            "min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800/60 px-2.5 py-1.5 text-slate-200 text-sm transition-all duration-200 max-sm:max-w-20 sm:w-24",
+                            {
+                              "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                                props.accent === "emerald",
+                              "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                                props.accent !== "emerald",
+                            },
+                          ]}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateField(i, "to", e.currentTarget.value)
@@ -104,13 +108,15 @@ export default function FromToTable(props: Props) {
                           <CurrencyEuro class="size-3.5 translate-y-px text-slate-600" />
                         </span>
                         <input
-                          classList={{
-                            "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
-                              props.accent === "emerald",
-                            "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
-                              props.accent !== "emerald",
-                            "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28": true,
-                          }}
+                          class={[
+                            "min-w-0 rounded-lg border border-slate-700 bg-slate-800/60 py-1.5 pr-2.5 pl-8 font-medium text-slate-200 text-sm transition-all duration-200 max-sm:w-24 sm:w-28",
+                            {
+                              "focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30":
+                                props.accent === "emerald",
+                              "focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30":
+                                props.accent !== "emerald",
+                            },
+                          ]}
                           onFocus={props.onfocus}
                           onInput={(e) =>
                             updateAmount(i, e.currentTarget.value)
@@ -133,7 +139,7 @@ export default function FromToTable(props: Props) {
                     </td>
                   </tr>
                 )}
-              </Index>
+              </For>
             </tbody>
           </table>
         </div>

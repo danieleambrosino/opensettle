@@ -1,5 +1,4 @@
-import { createEffect, createMemo } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createEffect, createMemo, createStore } from "solid-js";
 import { computeBalances } from "@/lib/balance";
 import AutoSync from "@/lib/components/auto-sync";
 import BalanceTable from "@/lib/components/balance-table";
@@ -49,21 +48,29 @@ export default function App() {
     state.balances.length > 0 ? computeMinimalSettlementSet(state.balances) : []
   );
 
-  createEffect(() => {
-    if (state.autoSyncObligations) {
-      setState("obligations", computedObligations());
+  createEffect(
+    () => ({
+      obligations: state.autoSyncObligations ? computedObligations() : undefined,
+      balances: state.autoSyncBalances ? computedBalances() : undefined,
+      settlements: state.autoSyncSettlements ? computedSettlements() : undefined,
+    }),
+    ({ obligations, balances, settlements }) => {
+      if (obligations) {
+        setState((s) => { s.obligations = obligations; });
+      }
+      if (balances) {
+        setState((s) => { s.balances = balances; });
+      }
+      if (settlements) {
+        setState((s) => { s.settlements = settlements; });
+      }
     }
-    if (state.autoSyncBalances) {
-      setState("balances", computedBalances());
-    }
-    if (state.autoSyncSettlements) {
-      setState("settlements", computedSettlements());
-    }
-  });
+  );
 
-  createEffect(() => {
-    saveExpenses(state.expenses);
-  });
+  createEffect(
+    () => state.expenses,
+    (expenses) => { saveExpenses(expenses); }
+  );
 
   const steps = () =>
     createSteps(
@@ -74,15 +81,27 @@ export default function App() {
     );
 
   function addExpense(e: Expense) {
-    setState("expenses", (prev) => [...prev, e]);
+    setState((s) => {
+      s.expenses = [...s.expenses, e];
+    });
   }
 
   function removeExpense(idx: number) {
-    setState("expenses", (prev) => prev.filter((_, i) => i !== idx));
+    setState((s) => {
+      s.expenses = s.expenses.filter((_, i) => i !== idx);
+    });
   }
 
   function handleImport(data: ImportData) {
-    setState({ ...data });
+    setState((s) => {
+      s.autoSyncBalances = data.autoSyncBalances;
+      s.autoSyncObligations = data.autoSyncObligations;
+      s.autoSyncSettlements = data.autoSyncSettlements;
+      s.balances = data.balances;
+      s.expenses = data.expenses;
+      s.obligations = data.obligations;
+      s.settlements = data.settlements;
+    });
   }
 
   return (
@@ -98,7 +117,11 @@ export default function App() {
           <ExpenseForm onAddExpense={addExpense} />
           <ExpenseTable
             items={state.expenses}
-            onItemsChange={(items: Expense[]) => setState("expenses", items)}
+            onItemsChange={(items: Expense[]) =>
+              setState((s) => {
+                s.expenses = items;
+              })
+            }
             onRemove={removeExpense}
           />
         </SectionCard>
@@ -109,7 +132,11 @@ export default function App() {
             <AutoSync
               accent="violet"
               autoSync={state.autoSyncObligations}
-              onsync={() => setState("autoSyncObligations", true)}
+              onsync={() =>
+                setState((s) => {
+                  s.autoSyncObligations = true;
+                })
+              }
             />
           }
           number={2}
@@ -119,13 +146,23 @@ export default function App() {
             accent="violet"
             emptyMessage="Obligations appear automatically when expenses are added"
             items={state.obligations}
-            onfocus={() => setState("autoSyncObligations", false)}
+            onfocus={() =>
+              setState((s) => {
+                s.autoSyncObligations = false;
+              })
+            }
             onItemsChange={(items: Transaction[]) =>
-              setState("obligations", items)
+              setState((s) => {
+                s.obligations = items;
+              })
             }
             onRemove={(i) => {
-              setState("obligations", (prev) => prev.filter((_, j) => j !== i));
-              setState("autoSyncObligations", false);
+              setState((s) => {
+                s.obligations = s.obligations.filter((_, j) => j !== i);
+              });
+              setState((s) => {
+                s.autoSyncObligations = false;
+              });
             }}
           >
             <Document class="size-7 text-slate-600" />
@@ -138,7 +175,11 @@ export default function App() {
             <AutoSync
               accent="amber"
               autoSync={state.autoSyncBalances}
-              onsync={() => setState("autoSyncBalances", true)}
+              onsync={() =>
+                setState((s) => {
+                  s.autoSyncBalances = true;
+                })
+              }
             />
           }
           number={3}
@@ -147,11 +188,23 @@ export default function App() {
           <BalanceTable
             emptyMessage="Balances appear automatically when obligations are available"
             items={state.balances}
-            onfocus={() => setState("autoSyncBalances", false)}
-            onItemsChange={(items: Balance[]) => setState("balances", items)}
+            onfocus={() =>
+              setState((s) => {
+                s.autoSyncBalances = false;
+              })
+            }
+            onItemsChange={(items: Balance[]) =>
+              setState((s) => {
+                s.balances = items;
+              })
+            }
             onRemove={(i) => {
-              setState("balances", (prev) => prev.filter((_, j) => j !== i));
-              setState("autoSyncBalances", false);
+              setState((s) => {
+                s.balances = s.balances.filter((_, j) => j !== i);
+              });
+              setState((s) => {
+                s.autoSyncBalances = false;
+              });
             }}
           >
             <CurrencyEuro class="size-7 text-slate-600" />
@@ -164,7 +217,11 @@ export default function App() {
             <AutoSync
               accent="emerald"
               autoSync={state.autoSyncSettlements}
-              onsync={() => setState("autoSyncSettlements", true)}
+              onsync={() =>
+                setState((s) => {
+                  s.autoSyncSettlements = true;
+                })
+              }
             />
           }
           number={4}
@@ -174,13 +231,23 @@ export default function App() {
             accent="emerald"
             emptyMessage="Settlements appear automatically when balances are available"
             items={state.settlements}
-            onfocus={() => setState("autoSyncSettlements", false)}
+            onfocus={() =>
+              setState((s) => {
+                s.autoSyncSettlements = false;
+              })
+            }
             onItemsChange={(items: Transaction[]) =>
-              setState("settlements", items)
+              setState((s) => {
+                s.settlements = items;
+              })
             }
             onRemove={(i) => {
-              setState("settlements", (prev) => prev.filter((_, j) => j !== i));
-              setState("autoSyncSettlements", false);
+              setState((s) => {
+                s.settlements = s.settlements.filter((_, j) => j !== i);
+              });
+              setState((s) => {
+                s.autoSyncSettlements = false;
+              });
             }}
           >
             <CheckCircle class="size-7 text-slate-600" />

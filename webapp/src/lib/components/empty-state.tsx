@@ -1,8 +1,8 @@
-import { type JSX, Show } from "solid-js";
+import { type Element, Show } from "solid-js";
 import CurrencyEuro from "@/lib/components/icons/currency-euro";
 
 interface Props {
-  children?: JSX.Element;
+  children?: Element;
   message: string;
 }
 
