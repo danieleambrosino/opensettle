@@ -50,26 +50,38 @@ export default function App() {
 
   createEffect(
     () => ({
-      obligations: state.autoSyncObligations ? computedObligations() : undefined,
       balances: state.autoSyncBalances ? computedBalances() : undefined,
-      settlements: state.autoSyncSettlements ? computedSettlements() : undefined,
+      obligations: state.autoSyncObligations
+        ? computedObligations()
+        : undefined,
+      settlements: state.autoSyncSettlements
+        ? computedSettlements()
+        : undefined,
     }),
     ({ obligations, balances, settlements }) => {
       if (obligations) {
-        setState((s) => { s.obligations = obligations; });
+        setState((s) => {
+          s.obligations = obligations;
+        });
       }
       if (balances) {
-        setState((s) => { s.balances = balances; });
+        setState((s) => {
+          s.balances = balances;
+        });
       }
       if (settlements) {
-        setState((s) => { s.settlements = settlements; });
+        setState((s) => {
+          s.settlements = settlements;
+        });
       }
     }
   );
 
   createEffect(
     () => state.expenses,
-    (expenses) => { saveExpenses(expenses); }
+    (expenses) => {
+      saveExpenses(expenses);
+    }
   );
 
   const steps = () =>
