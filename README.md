@@ -53,7 +53,7 @@ to contribute a different amount.
 
 I could have used Tricount or Splitwise. But where's the fun in that?
 
-The problem is deceptively simple: split some expenses, then figure out who pays whom to settle everyone with as few transactions as possible. That second part — the **Minimum Transaction Problem** — is what hooked me. The theory (subset sum, NP-hardness, why greedy works) is documented in [MTP.md](MTP.md). Easy on the surface, but finding the truly minimal set of transactions is NP-hard. The tension between a simple question and a hard problem fascinated me.
+The problem is deceptively simple: split some expenses, then figure out who pays whom to settle everyone with as few transactions as possible. That second part — the **Minimum Transaction Problem** — is what hooked me. The theory (subset sum, the greedy approximation) is documented in [MTP.md](MTP.md). Easy on the surface, but finding the truly minimal set of transactions is NP-hard. The tension between a simple question and a hard problem fascinated me.
 
 I wanted to write the splitting algorithm myself, improve my Go and write a tool that works the Unix way — small composable commands that pipe JSON around, so I can inspect, edit, or rewire the intermediate
 results if someone's share doesn't feel right.
