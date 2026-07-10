@@ -59,10 +59,11 @@ I wanted to write the splitting algorithm myself, improve my Go and write a tool
 results if someone's share doesn't feel right.
 
 So I built a CLI. Then I thought: why not a GUI too? Having a visual
-version of the same pipeline felt like a good excuse to build something
-with Solid. The algorithm ended up implemented twice — Go for the CLI,
-TypeScript for the webapp. Who cares. It's a side project, and writing
-the same thing in two languages was half the fun 🙂
+version of the same pipeline felt like the perfect excuse to finally play
+with Solid, a framework I had never used but always admired and was
+curious to learn — especially now that the v2 beta is out. The algorithm ended up implemented twice — Go for
+the CLI, TypeScript for the webapp. Who cares. It's a side project,
+and writing the same thing in two languages was half the fun 🙂
 
 All algorithms are hand-written. The webapp UI — the Solid components,
 layout, and styling — was built with some help from DeepSeek V4 Flash.
